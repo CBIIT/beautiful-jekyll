@@ -6,7 +6,7 @@
 # If you are building a simple GitHub user page (https://username.github.io) then use these settings:
 url: "https://username.github.io"
 #baseurl: ""
-baseurl: /sdsi2
+baseurl: /sdsi
 
 # If you are building a GitHub project page then use these settings:
 #url: "http://username.github.io/projectname"
@@ -15,7 +15,7 @@ baseurl: /sdsi2
 # Of course don't forget to change the username and projectname to YOUR username and project
 
 # Name of website
-title: SDSI2
+title: SDSI New
 
 # Short description of your site
 description: A virtual proof that name is awesome!
