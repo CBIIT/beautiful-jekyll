@@ -7,7 +7,7 @@
 
 # If you are building a simple GitHub user page (https://username.github.io) then use these settings:
 #url: "https://username.github.io"
-url: "https://cbiit.github.io/sdsi"
+url: "https://cbiit.github.com"
 #baseurl: ""
 baseurl: /sdsi
 
@@ -119,7 +119,7 @@ social-network-links:
 # How to display the link to the website in the footer
 # Remove this if you don't want a link in the footer
 #url-pretty: "MyWebsite.com"  # eg. "deanattali.com/beautiful-jekyll"
-url-pretty: "cbiit.github.com"  # eg. "deanattali.com/beautiful-jekyll"
+url-pretty: "cbiit.github.com/sdsi"  # eg. "deanattali.com/beautiful-jekyll"
 
 # --- Web Statistics Section --- #
 
