@@ -1,10 +1,13 @@
+# img/path.jpg
+
 # --- General options --- #
 
 # url is the full website URL
 # baseurl is the website's URL without the hostname
 
 # If you are building a simple GitHub user page (https://username.github.io) then use these settings:
-url: "https://username.github.io"
+#url: "https://username.github.io"
+url: "https://cbiit.github.io/sdsi"
 #baseurl: ""
 baseurl: /sdsi
 
@@ -15,10 +18,10 @@ baseurl: /sdsi
 # Of course don't forget to change the username and projectname to YOUR username and project
 
 # Name of website
-title: SDSI
+title: Strategic Data Science Initiatives
 
 # Short description of your site
-description: A virtual proof that I'm awesome
+description: Homepage for the Strategic Data Science Initiatives (SDSI) team in the BIDS directorate of the Frederick National Laboratory for Cancer Research
 
 # --- Local development options ---
 # If your website is hosted locally rather than on GitHub, then you need to uncomment the next two parameters to set the url and baseurl
@@ -34,15 +37,23 @@ description: A virtual proof that I'm awesome
 
 # List of links in the navigation bar
 navbar-links:
-  About Me: "aboutme"
-  Resources:
-    - Beautiful Jekyll: "http://deanattali.com/beautiful-jekyll/"
-    - Learn markdown: "http://www.markdowntutorial.com/"
-  Author's home: "http://deanattali.com"
+  Team: https://cbiit.github.com/sdsi/team
+  CANDLE: https://cbiit.github.com/sdsi/candle
+  # About Me: "aboutme"
+  # Resources:
+  #   - Beautiful Jekyll: "http://deanattali.com/beautiful-jekyll/"
+  #   - Learn markdown: "http://www.markdowntutorial.com/"
+  # Author's home: "http://deanattali.com"
+  Links:
+#    - CANDLE templates: "https://github.com/ECP-CANDLE/Supervisor/tree/fnlcr/templates"
+    - NIH.AI: "https://nciphub.org/groups/nihai"
+    - Biowulf: "https://hpc.nih.gov"
+    - CANDLE docs: "https://ecp-candle.github.io/candle"
+  SDSI GitHub repo: "https://github.com/cbiit/sdsi"
 
 # Image to show in the navigation bar - image must be a square (width = height)
 # Remove this parameter if you don't want an image in the navbar
-avatar: "/img/avatar-icon.png"
+#avatar: "/img/avatar-icon.png"
 
 # If you want to have an image logo in the top-left corner instead of the title text,
 # then specify the following parameter
@@ -74,7 +85,7 @@ footer-link-col: "#404040"
 # Change all these values or delete the ones you don't want.
 # Important: you must keep the "name" parameter, everything else you can remove
 author:
-  name: Some Person
+  name: Andrew Weisman
 
 # Select your active Social Network Links.
 # Uncomment the links you want to show in the footer and add your information to each link.
@@ -82,10 +93,10 @@ author:
 # If you want to add a new link that isn't here, you'll need to also edit the file _data/SocialNetworks.yml
 social-network-links:
   rss: true
-  email: "someone@example.com"
-  facebook: deanattali
-  github: daattali
-  twitter: daattali
+  email: "andrew.weisman@nih.gov"
+#   facebook: deanattali
+  github: CBIIT/sdsi
+#   twitter: daattali
 #  reddit: yourname
 #  linkedin: daattali
 #  xing: yourname
@@ -100,14 +111,15 @@ social-network-links:
 #  yelp: yourname
 
 # Select which share links to show in posts
-share-links-active:
-  twitter: true
-  facebook: true
-  linkedin: true
+# share-links-active:
+#   twitter: true
+#   facebook: true
+#   linkedin: true
 
 # How to display the link to the website in the footer
 # Remove this if you don't want a link in the footer
-url-pretty: "MyWebsite.com"  # eg. "deanattali.com/beautiful-jekyll"
+#url-pretty: "MyWebsite.com"  # eg. "deanattali.com/beautiful-jekyll"
+url-pretty: "cbiit.github.com/sdsi"  # eg. "deanattali.com/beautiful-jekyll"
 
 # --- Web Statistics Section --- #
 
