@@ -780,3 +780,8 @@ td.gutter {
   font-style: italic;
   font-size: 16px;
 }
+
+.highlighter-rouge {
+  color: #337ab7;
+  background-color: #333333;
+}
