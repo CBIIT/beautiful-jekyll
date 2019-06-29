@@ -5,7 +5,7 @@ title: How to run CANDLE on Biowulf
 
 # Introduction
 
-CANDLE is open source software for hyperparameter optimization that scales very efficiently on the world's fastest supercomputers.  The [SDSI team](https://cbiit.github.com/sdsi/team) at the [Frederick National Laboratory for Cancer Research](https://frederick.cancer.gov), sponsored by NCI, has recently installed CANDLE on NIH's [Biowulf](https://hpc.nih.gov) supercomputer.
+CANDLE (CANcer Distributed Learning Environment) is open source software for hyperparameter optimization that scales very efficiently on the world's fastest supercomputers.  The [SDSI team](https://cbiit.github.com/sdsi/team) at the [Frederick National Laboratory for Cancer Research](https://frederick.cancer.gov), sponsored by the National Cancer Institute, has recently installed CANDLE on NIH's [Biowulf](https://hpc.nih.gov) supercomputer.
 
 In a machine/deep learning model, "hyperparameters" refer to any variables that define the model aside from the model's "weights."  Typically, for a given set of hyperparameters (typically 5-20), the corresponding model's weights (typically tens of thousands) are iteratively optimized using algorithms such as gradient descent.  Such optimization of the model's weights starting from random values -- a process called "training" -- is typically run very efficiently on graphics processing units (GPUs) and typically takes 30 min. to a couple days.
 
