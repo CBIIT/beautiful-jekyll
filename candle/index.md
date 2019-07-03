@@ -5,7 +5,7 @@ title: How to run CANDLE on Biowulf
 
 # Introduction
 
-CANDLE (CANcer Distributed Learning Environment) is open source software for hyperparameter optimization that scales very efficiently on the world's fastest supercomputers.  The [SDSI team](https://cbiit.github.com/sdsi/team) at the [Frederick National Laboratory for Cancer Research](https://frederick.cancer.gov), sponsored by the National Cancer Institute, has recently installed CANDLE on NIH's [Biowulf](https://hpc.nih.gov) supercomputer.
+CANDLE (CANcer Distributed Learning Environment) is open source software for hyperparameter optimization that scales very efficiently on the world's fastest supercomputers.  The [SDSI team](https://cbiit.github.com/sdsi/team) at the [Frederick National Laboratory for Cancer Research](https://frederick.cancer.gov), sponsored by the [National Cancer Institute](https://www.cancer.gov), has recently installed CANDLE on NIH's [Biowulf](https://hpc.nih.gov) supercomputer.
 
 In a machine/deep learning model, "hyperparameters" refer to any variables that define the model aside from the model's "weights."  Typically, for a given set of hyperparameters (typically 5-20), the corresponding model's weights (typically tens of thousands) are iteratively optimized using algorithms such as gradient descent.  Such optimization of the model's weights starting from random values -- a process called "training" -- is typically run very efficiently on graphics processing units (GPUs) and typically takes 30 min. to a couple days.
 
@@ -62,6 +62,7 @@ You only need to modify the six settings inside the `submit_candle_job.sh` scrip
 * **`DEFAULT_PARAMS_FILE`**: Default settings for the hyperparameters defined in the model (following section)
   * E.g., `$CANDLE_WRAPPERS/templates/model_params/mnist1.txt`
   * These values will be overwritten by those defined in the `WORKFLOW_SETTINGS_FILE`, below
+  * Note that this must be a full pathname
 * **`WORKFLOW_SETTINGS_FILE`**: This file contains the settings parametrizing the workflow you would like to run
   * E.g., `$CANDLE_WRAPPERS/templates/workflow_settings/upf_workflow-3.txt`
   * These settings will assign values to the hyperparameters that will override their default values defined by `DEFAULT_PARAMS_FILE`, above
