@@ -5,13 +5,13 @@ title: How to run CANDLE on Biowulf
 
 # Introduction
 
-CANDLE (CANcer Distributed Learning Environment) is open source software for hyperparameter optimization that scales very efficiently on the world's fastest supercomputers.  The [SDSI team](https://cbiit.github.com/sdsi/team) at the [Frederick National Laboratory for Cancer Research](https://frederick.cancer.gov), sponsored by the [National Cancer Institute](https://www.cancer.gov), has recently installed CANDLE on NIH's [Biowulf](https://hpc.nih.gov) supercomputer.
+CANDLE (CANcer Distributed Learning Environment) is open source software for hyperparameter optimization that scales very efficiently on the world's fastest supercomputers.  Developed initially to address three top challenges facing the cancer community, CANDLE increasingly can be used to tackle problems in other application areas.  The [SDSI team](https://cbiit.github.com/sdsi/team) at the [Frederick National Laboratory for Cancer Research](https://frederick.cancer.gov), sponsored by the [National Cancer Institute](https://www.cancer.gov), has recently installed CANDLE on NIH's [Biowulf](https://hpc.nih.gov) supercomputer.
 
 In a machine/deep learning model, "hyperparameters" refer to any variables that define the model aside from the model's "weights."  Typically, for a given set of hyperparameters (typically 5-20), the corresponding model's weights (typically tens of thousands) are iteratively optimized using algorithms such as gradient descent.  Such optimization of the model's weights starting from random values -- a process called "training" -- is typically run very efficiently on graphics processing units (GPUs) and typically takes 30 min. to a couple days.
 
-If a measure of accuracy is assigned to each model trained on the same set of data, we would like to ultimately choose the model (i.e., set of hyperparameters) that best fits that dataset by maximizing the accuracy (or minimizing a loss).  The process of choosing the best set of hyperparameters is referred to as "[hyperparameter optimization](https://en.wikipedia.org/wiki/Hyperparameter_optimization)" (HPO).  The most common, brute-force way of determining the optimal set of hyperparameters is to run one training job for every desired combination of hyperparameters and choose that which produces the highest accuracy.  Such a workflow is labeled in CANDLE by "UPF," which stands for Unrolled Parameter File, which is simply a text file specifying all the combinations of hyperparameters to be run.
+If a measure of accuracy is assigned to each model trained on the same set of data, we would like to ultimately choose the model (i.e., set of hyperparameters) that best fits that dataset by maximizing the accuracy (or minimizing a loss).  The process of choosing the best set of hyperparameters is referred to as "[hyperparameter optimization](https://en.wikipedia.org/wiki/Hyperparameter_optimization)" (HPO).  The most common, brute-force way of determining the optimal set of hyperparameters is to run one training job for every desired combination of hyperparameters and choose that which produces the highest accuracy.  Such a workflow is labeled in CANDLE by "grid"; it is called in other contexts "grid search."
 
-A more elegant way of determining the optimal set of hyperparameters is to use a Bayesian approach in which information about how well prior sets of hyperparameters performed is used to select the next sets of hyperparameters to try.  This type of workflow is labeled in CANDLE by "[mlrMBO](https://mlrmbo.mlr-org.com)."
+A more elegant way of determining the optimal set of hyperparameters is to use a Bayesian approach in which information about how well prior sets of hyperparameters performed is used to select the next sets of hyperparameters to try.  This type of workflow is labeled in CANDLE by "[bayesian](https://mlrmbo.mlr-org.com)".
 
 HPO need not be used for only machine/deep learning applications; it can be applied to any computational pipeline that can be parametrized by a number of settings.  With ever-increasing amounts of data, applications like these, in addition to machine/deep learning applications, are growing at NCI and in the greater NIH community.  If HPO is performed, better models for describing relationships between data can be found, and the better the model, the more accurate predictions can be determined given new sets of data.  CANDLE is here to help with this!
 
@@ -34,7 +34,7 @@ module load candle
 Copy the template CANDLE submission script `submit_candle_job.sh` to the working directory:
 
 ```bash
-copy_candle_template-new
+copy_candle_template
 ```
 
 This will also create an empty `experiments` directory in the working directory.
@@ -64,11 +64,11 @@ You only need to modify the six settings inside the `submit_candle_job.sh` scrip
   * These values will be overwritten by those defined in the `WORKFLOW_SETTINGS_FILE`, below
   * Note that this must be a full pathname
 * **`WORKFLOW_SETTINGS_FILE`**: This file contains the settings parametrizing the workflow you would like to run
-  * E.g., `$CANDLE_WRAPPERS/templates/workflow_settings/upf_workflow-3.txt`
+  * E.g., `$CANDLE_WRAPPERS/templates/workflow_settings/grid_workflow-mnist.txt`
   * These settings will assign values to the hyperparameters that will override their default values defined by `DEFAULT_PARAMS_FILE`, above
   * The hyperparameters specified in this file should be a subset of those in `DEFAULT_PARAMS_FILE`, indicating only the hyperparameters that will be changed during the workflow
-  * The filename MUST begin with `<WORKFLOW_TYPE>_workflow-`, where `<WORKFLOW_TYPE>` is `upf`
-  * Run `module load python/3.6; python $CANDLE_WRAPPERS/templates/scripts/generate_hyperparameter_grid.py` for help with generating an Unrolled Parameter File if running the UPF workflow
+  * The filename MUST begin with `<WORKFLOW_TYPE>_workflow-`, where `<WORKFLOW_TYPE>` is `grid` or `bayesian`
+  * Run `module load python/3.6; python $CANDLE_WRAPPERS/templates/scripts/generate_hyperparameter_grid.py` for help with generating the file pointed to by `$WORKFLOW_SETTINGS_FILE` if running the "grid" workflow
   * Note: Python's `False`, `True`, and `None`, should be replaced by JSON's `false`, `true`, and `null` in `WORKFLOW_SETTINGS_FILE`
 * **`NGPUS`**: Number of GPUs you would like to use for the CANDLE job
   * E.g., `2`
@@ -108,7 +108,7 @@ You only need to modify the six settings inside the `submit_candle_job.sh` scrip
 * **`EXTRA_SCRIPT_ARGS`**: Command-line arguments you'd like to include when invoking Python or Rscript
   * E.g., `--max-ppsize=100000` if the model is written in R
   * In other words, the model will ultimately be run like `python $EXTRA_SCRIPT_ARGS my_model.py` or `Rscript $EXTRA_SCRIPT_ARGS my_model.R`
-* **`RESTART_FROM_EXP`**: If a UPF job was run previously but for whatever reason did not complete, here you can specify the name of the experiment from which to resume
+* **`RESTART_FROM_EXP`**: If a "grid" workflow was run previously but for whatever reason did not complete, here you can specify the name of the experiment from which to resume
   * E.g., `X002`
 
 # Adapting your model to work with CANDLE
@@ -170,4 +170,4 @@ val_to_return <- my_validation_loss
 
 ---
 
-Feel free to email [Andrew Weisman](mailto:andrew.weisman@nih.gov) with any questions.
+Feel free to email the [SDSI team](mailto:andrew.weisman@nih.gov) with any questions.
