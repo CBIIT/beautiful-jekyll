@@ -15,6 +15,8 @@ A more elegant way of determining the optimal set of hyperparameters is to use a
 
 HPO need not be used for only machine/deep learning applications; it can be applied to any computational pipeline that can be parametrized by a number of settings.  With ever-increasing amounts of data, applications like these, in addition to machine/deep learning applications, are growing at NCI and in the greater NIH community.  If HPO is performed, better models for describing relationships between data can be found, and the better the model, the more accurate predictions can be determined given new sets of data.  CANDLE is here to help with this!
 
+[Link](https://github.com/fnlcr-bids-sdsi/hpo_workshop/blob/master/candle_on_biowulf.pdf): Presentation on [how to use CANDLE on Biowulf](https://github.com/fnlcr-bids-sdsi/hpo_workshop/blob/master/candle_on_biowulf.pdf) on 7/18/19
+
 # Quick start
 
 These steps will get you running a sample CANDLE job on Biowulf right away!
@@ -29,55 +31,56 @@ cd /data/$USER/candle
 module load candle
 ```
 
-## Step 2: Copy the template submission script to the working directory
+## Step 2: Copy a template submission script to the working directory
 
-Copy the template CANDLE submission script `submit_candle_job.sh` to the working directory:
+Copy one of the three CANDLE templates (a set of files) to the working directory:
 
 ```bash
-copy_candle_template
+candle import-template {grid,bayesian,r}
 ```
 
-This will also create an empty `experiments` directory in the working directory.
+`grid` refers to a grid search using a Python model, `bayesian` refers to a Bayesian search using a Python model, and `r` refers to a grid search using an R model.
 
 ## Step 3: Run the job
 
 Submit the job by running
 
 ```bash
-./submit_candle_job.sh
+candle submit-job submit_candle_job.sh
 ```
-
-(No, there really is no need for `sbatch`.)
 
 # Modifying the template for your use case
 
-You only need to modify the six settings inside the `submit_candle_job.sh` script.  All variables should be preceded by an `export` command, as they are in the template submission script.  Please examine the sample settings below to better understand their meaning.
+You only need to modify the six settings inside the `submit_candle_job.sh` script.  All variables should be preceded by an `export` command, as they are in the template submission script.  Please examine the sample settings below to better understand their meaning.  Please use full pathnames.
 
 ## Required variables
 
 * **`MODEL_SCRIPT`**: This should point to the Python or R script that you would like to run
-  * E.g., `$CANDLE_WRAPPERS/templates/models/wrapper_compliant/mnist_mlp.py`
+  * E.g., `export MODEL_SCRIPT="$(pwd)/mnist_mlp.py"`
   * This script must have been adapted to work with CANDLE (see the following section)
   * The filename extension will automatically determine whether Python or R will be used to run the model
+  * Please use a full pathname, e.g., `/path/to/file.py` instead of `file.py`
 * **`DEFAULT_PARAMS_FILE`**: Default settings for the hyperparameters defined in the model (following section)
-  * E.g., `$CANDLE_WRAPPERS/templates/model_params/mnist1.txt`
+  * E.g., `export DEFAULT_PARAMS_FILE="$(pwd)/mnist_default_params.txt"`
   * These values will be overwritten by those defined in the `WORKFLOW_SETTINGS_FILE`, below
-  * Note that this must be a full pathname
+  * Please use a full pathname
 * **`WORKFLOW_SETTINGS_FILE`**: This file contains the settings parametrizing the workflow you would like to run
-  * E.g., `$CANDLE_WRAPPERS/templates/workflow_settings/grid_workflow-mnist.txt`
+  * E.g., `export WORKFLOW_SETTINGS_FILE="$(pwd)/grid_workflow-mnist.txt"`
   * These settings will assign values to the hyperparameters that will override their default values defined by `DEFAULT_PARAMS_FILE`, above
   * The hyperparameters specified in this file should be a subset of those in `DEFAULT_PARAMS_FILE`, indicating only the hyperparameters that will be changed during the workflow
-  * The filename MUST begin with `<WORKFLOW_TYPE>_workflow-`, where `<WORKFLOW_TYPE>` is `grid` or `bayesian`
-  * Run `module load python/3.6; python $CANDLE_WRAPPERS/templates/scripts/generate_hyperparameter_grid.py` for help with generating the file pointed to by `$WORKFLOW_SETTINGS_FILE` if running the "grid" workflow
+  * The filename MUST begin with `<WORKFLOW_TYPE>_workflow-`, where `<WORKFLOW_TYPE>` is `grid` (`.txt` file) or `bayesian` (`.R` file)
+  * Run `candle generate-grid <PYTHON-LIST-1> <PYTHON-LIST-2> ...` for help with generating the file pointed to by `$WORKFLOW_SETTINGS_FILE` if running the `grid` workflow
+    * E.g., `candle generate-grid "['nlayers',np.arange(5,15,2)]" "['dir',['x','y','z']]"`
   * Note: Python's `False`, `True`, and `None`, should be replaced by JSON's `false`, `true`, and `null` in `WORKFLOW_SETTINGS_FILE`
+  * Please use a full pathname
 * **`NGPUS`**: Number of GPUs you would like to use for the CANDLE job
-  * E.g., `2`
-  * Note: One or two extra nodes will be allocated in order run background processes
+  * E.g., `export NGPUS=2`
+  * Note: One (`grid`) or two (`bayesian`) extra GPUs will be allocated in order run background processes
 * **`GPU_TYPE`**: Type of GPU you would like to use
-  * E.g., `k80`
+  * E.g., `export GPU_TYPE="k80"`
   * The choices on Biowulf are `k20x`, `k80`, `p100`, `v100`
 * **`WALLTIME`**: How long you would like your job to run
-  * E.g., `00:20:00`
+  * E.g., `export WALLTIME="00:20:00"`
   * Format is `HH:MM:SS`
 
 ## Optional variables
@@ -85,35 +88,42 @@ You only need to modify the six settings inside the `submit_candle_job.sh` scrip
 ### Python models only
 
 * **`PYTHON_BIN_PATH`**: If you don't want to use the Python version with which CANDLE was built (currently `python/3.6`), you can set this to the location of the Python binary you would like to use
-  * E.g., `$CONDA_PREFIX/envs/<YOUR_CONDA_ENVIRONMENT_NAME>/bin`
-  * E.g., `/data/BIDS-HPC/public/software/conda/envs/main3.6/bin`
+  * E.g., `export PYTHON_BIN_PATH="$CONDA_PREFIX/envs/<YOUR_CONDA_ENVIRONMENT_NAME>/bin"`
+  * E.g., `export PYTHON_BIN_PATH="/data/BIDS-HPC/public/software/conda/envs/main3.6/bin"`
   * If set, it will override the setting of `EXEC_PYTHON_MODULE`, below
 * **`EXEC_PYTHON_MODULE`**: If you'd prefer loading a module rather than specifying the path to the Python binary (above), set this to the name of the Python module you would like to load
-  * E.g., `python/2.7`
+  * E.g., `export EXEC_PYTHON_MODULE="python/2.7"`
   * This setting will have no effect if `PYTHON_BIN_PATH` (above) is set
   * If neither `PYTHON_BIN_PATH` nor `EXEC_PYTHON_MODULE` is set, then the version of Python with which CANDLE was built (currently `python/3.6`) will be used
 * **`SUPP_PYTHONPATH`**: This is a supplementary setting of the PYTHONPATH variable that will be searched for libraries that can't otherwise be found
-  * E.g., `/data/$USER/conda/envs/my_conda_env/lib/python3.6/site-packages`
-  * E.g., `/data/BIDS-HPC/public/software/conda/envs/main3.6/lib/python3.6/site-packages`
+  * E.g., `export SUPP_PYTHONPATH="/data/BIDS-HPC/public/software/conda/envs/main3.6/lib/python3.6/site-packages"`
+  * E.g., `export SUPP_PYTHONPATH="/data/$USER/conda/envs/my_conda_env/lib/python3.6/site-packages"`
 
 ### R models only
 
 * **`EXEC_R_MODULE`**: If you don't want to use the R version with which CANDLE was built (currently `R/3.5.0`), set this to the name of the R module you would like to load
-  * E.g., `R/3.6`
+  * E.g., `export EXEC_R_MODULE="R/3.6"`
+* **`SUPP_R_LIBS`**: This is a supplementary setting of the R_LIBS variable that will be searched for libraries that can't otherwise be found
+  * E.g., `export SUPP_R_LIBS="/data/BIDS-HPC/public/software/R/3.6/library"`
+  * Note: `R` will search your standard library location on Biowulf, so feel free to just install your own `R` libraries there
 
 ### Models written in either language
 
 * **`SUPP_MODULES`**: Modules you would like to have loaded while your model is run
-  * E.g., `"CUDA/10.0 cuDNN/7.5/CUDA-10.0"` (these particular example settings are necessary for running TensorFlow when using a custom Conda installation)
+  * E.g., `export SUPP_MODULES="CUDA/10.0 cuDNN/7.5/CUDA-10.0"` (these particular example settings are necessary for running TensorFlow when using a custom Conda installation)
 * **`EXTRA_SCRIPT_ARGS`**: Command-line arguments you'd like to include when invoking Python or Rscript
-  * E.g., `--max-ppsize=100000` if the model is written in R
+  * E.g., `export EXTRA_SCRIPT_ARGS="--max-ppsize=100000"` if the model is written in R
   * In other words, the model will ultimately be run like `python $EXTRA_SCRIPT_ARGS my_model.py` or `Rscript $EXTRA_SCRIPT_ARGS my_model.R`
 * **`RESTART_FROM_EXP`**: If a "grid" workflow was run previously but for whatever reason did not complete, here you can specify the name of the experiment from which to resume
-  * E.g., `X002`
+  * E.g., `export RESTART_FROM_EXP="X002"`
+* **`USE_CANDLE`**: Whether to use CANDLE to run a workflow (`1`) or to simply run the model on the default set of hyperparameters (`0`)
+  * E.g., `export USE_CANDLE=0`
+  * Note: The default value is `1`
+  * If set to `0`, use an interactive node (e.g., `sinteractive --gres=gpu:k20x:1 --mem=60G --cpus-per-task=16`), as rather than submitting a job to the batch queue, the job will run on the current node
 
 # Adapting your model to work with CANDLE
 
-Prior to adapting your model script, it should run standalone on a Biowulf compute node.  (This can be tested by requesting an interactive GPU node [e.g., `sinteractive --constraint=gpuk20x --mem=20G --gres=gpu:k20x:1`] and then running the model like, e.g., `python my_model.py` or `Rscript my_model.R`; don't forget to use the correct version of Python or R, if required!)  Otherwise, you script needs to be modified in two simple ways in order to work with CANDLE.
+Prior to adapting your model script, it should run standalone on a Biowulf compute node.  (This can be tested by requesting an interactive GPU node [e.g., `sinteractive --gres=gpu:k20x:1 --mem=60G --cpus-per-task=16`] and then running the model like, e.g., `python my_model.py` or `Rscript my_model.R`; don't forget to use the correct version of Python or R, if required!)  Otherwise, you script needs to be modified in two simple ways in order to work with CANDLE.
 
 ## Specify the hyperparameters
 
