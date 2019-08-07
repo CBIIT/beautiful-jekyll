@@ -2,6 +2,6 @@
 bigimg: "/img/FNL_ATRF_Pano_4x10.jpg"
 title: Welcome
 ---
-Welcome to the homepage of the Strategic Data Science Initiatives (SDSI) team in the BIDS directorate of the Frederick National Laboratory for Cancer Research.
+Welcome to the homepage of the Strategic Data Science Initiatives (SDSI) team at the [Frederick National Laboratory for Cancer Research](https://frederick.cancer.gov).
 
 Please click on the links at the top of the page to navigate this site.
