@@ -6,7 +6,7 @@ title: CANDLE on Biowulf
 # Notices
 ---
 
-*8/16/19:* If you are interested in joining a CANDLE-users NIH listserv, please [let us know](mailto:andrew.weisman@nih.gov); we are in the process of gauging interest.
+*8/6/19:* If you are interested in joining a CANDLE-users NIH listserv, please [let us know](mailto:andrew.weisman@nih.gov); we are in the process of gauging interest.
 
 # Links
 ---
@@ -16,6 +16,6 @@ title: CANDLE on Biowulf
 # Updates
 ---
 
-## 8/16/19
+## 8/6/19
 
 The CANDLE documentation is now live on [HPC@NIH's website](https://hpc.nih.gov/apps/candle)! This is only for the docs; please keep the page you're on bookmarked for updates, FAQ, etc.
