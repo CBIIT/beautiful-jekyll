@@ -1,10 +1,12 @@
 ---
 bigimg: "/img/FNL_ATRF_Pano_4x10.jpg"
-title: How to run CANDLE on Biowulf
+title: CANDLE on Biowulf
 ---
 
-**Note:** The CANDLE documentation has moved to [HPC@NIH's website](https://hpc.nih.gov/apps/candle).
+# 8/16/19
 
----
+The CANDLE documentation is now live on [HPC@NIH's website](https://hpc.nih.gov/apps/candle)!
 
-Feel free to email the [SDSI team](mailto:andrew.weisman@nih.gov) with any questions.
+This is only for the docs; please keep the page you're on bookmarked for updates related to CANDLE on Biowulf, FAQ, etc.
+
+If you have any interest in joining a CANDLE-users NIH listserv, please [let us know](mailto:andrew.weisman@nih.gov); we are in the process of gauging interest.
