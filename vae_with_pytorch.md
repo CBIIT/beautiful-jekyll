@@ -13,7 +13,8 @@ blah bleh
 
 * This webpage: [https://cbiit.github.com/sdsi/vae_with_pytorch](https://cbiit.github.com/sdsi/vae_with_pytorch)
 * [CANDLE on Biowulf documentation](https://hpc.nih.gov/apps/candle)
-* The FAES presentation
+* [Classroom presentation PDF](https://cbiit.github.com/sdsi/candle_on_biowulf-faes.pdf)
+* Feel free to contact [Andrew Weisman](mailto:andrew.weisman@nih.gov) or [George Zaki](mailto:george.zaki@nih.gov) for help with this exercise or with CANDLE in general
 
 # Exercise
 ---
