@@ -231,3 +231,23 @@ done
 ```
 
 Now take a look in ```subprocess_out_and_err.txt``` to ensure that our default settings had an effect. You should see now that only two epochs total have been run!
+
+# Homework
+
+Since it can take a while for jobs to pick up on Biowulf, you can try running a full hyperparamter optimization using CANDLE at home.
+
+Run on the command line
+
+```bash
+candle generate-grid "['epochs',np.arange(2,11,2)]" "['batch_size',[64,128,256,512,1024]]"
+```
+
+and place the contents of the generated file ```grid_workflow-XXXX.txt``` into the ```&param_space``` section of your input file.
+
+Set ```use_candle``` to 1 (or delete the setting altogether) and once again run
+
+```bash
+candle submit-job vae_with_pytorch.in
+```
+
+Now, once your job picks up by SLURM on Biowulf, a grid search using CANDLE should run!
