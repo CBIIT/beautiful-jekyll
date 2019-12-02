@@ -3,17 +3,12 @@ bigimg: "/img/FNL_ATRF_Pano_4x10.jpg"
 title: Running a variational autoencoder using PyTorch with CANDLE on Biowulf
 ---
 
-# Introduction
----
-
-blah bleh
-
 # Links
 ---
 
 * This webpage: [https://cbiit.github.com/sdsi/vae_with_pytorch](https://cbiit.github.com/sdsi/vae_with_pytorch)
-* [CANDLE on Biowulf documentation](https://hpc.nih.gov/apps/candle)
 * [Classroom presentation PDF](https://cbiit.github.com/sdsi/candle_on_biowulf-faes.pdf)
+* [CANDLE on Biowulf documentation](https://hpc.nih.gov/apps/candle)
 * Feel free to contact [Andrew Weisman](mailto:andrew.weisman@nih.gov) or [George Zaki](mailto:george.zaki@nih.gov) for help with this exercise or with CANDLE in general
 
 # Exercise
