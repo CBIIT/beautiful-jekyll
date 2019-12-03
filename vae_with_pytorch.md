@@ -107,7 +107,7 @@ Open up this file in a text editor and change the ```model_script``` variable to
 
 ```
 &control
-  model_script="main.py"
+  model_script="$(pwd)/main.py"
   workflow="grid"
   ngpus=2
   gpu_type="k80"
@@ -236,15 +236,39 @@ Now take a look in ```subprocess_out_and_err.txt``` to ensure that our default s
 
 Since it can take a while for jobs to pick up on Biowulf, you can try running a full hyperparamter optimization using CANDLE at home.
 
-Run on the command line
+Run on the command line:
 
 ```bash
 candle generate-grid "['epochs',np.arange(2,11,2)]" "['batch_size',[64,128,256,512,1024]]"
 ```
 
-and place the contents of the generated file ```grid_workflow-XXXX.txt``` into the ```&param_space``` section of your input file.
+and place the contents of the generated file ```grid_workflow-XXXX.txt``` into the ```&param_space``` section of your input file (delete what's already there).
 
-Set ```use_candle``` to 1 (or delete the setting altogether) and once again run
+In ```vae_with_pytorch.in``` set ```use_candle``` to ```1``` (or delete the setting altogether).
+
+Finally, ```main.py```'s authors assumed a particular directory structure, whereas we want the script to run wherever it's located. To address this, add these lines anywhere near the top of the script, e.g., right after the block of ```import``` statements:
+
+```python
+import os
+os.makedirs('data', exist_ok=True)
+os.makedirs('results', exist_ok=True)
+```
+
+Also, remove the ```../``` from the two lines containing ```datasets.MNIST('../data', ```, e.g.,
+
+```python
+train_loader = torch.utils.data.DataLoader(
+    #datasets.MNIST('../data', train=True, download=True,
+    datasets.MNIST('data', train=True, download=True,
+                   transform=transforms.ToTensor()),
+    batch_size=args.batch_size, shuffle=True, **kwargs)
+test_loader = torch.utils.data.DataLoader(
+    #datasets.MNIST('../data', train=False, transform=transforms.ToTensor()),
+    datasets.MNIST('data', train=False, transform=transforms.ToTensor()),
+    batch_size=args.batch_size, shuffle=True, **kwargs)
+```
+
+Finally, once again run:
 
 ```bash
 candle submit-job vae_with_pytorch.in
