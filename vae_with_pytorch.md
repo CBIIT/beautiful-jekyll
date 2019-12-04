@@ -2,6 +2,7 @@
 bigimg: "/img/FNL_ATRF_Pano_4x10.jpg"
 title: CANDLE on Biowulf
 subtitle: "Exercise: Running a Variational Autoencoder using PyTorch"
+fontsize: 10pt
 ---
 
 # Introduction
