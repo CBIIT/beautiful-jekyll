@@ -49,20 +49,27 @@ module load candle/dev
 
 **Note:** Once the main CANDLE module is updated, you only need to run ```module load candle``` as usual.
 
-Import a CANDLE template and delete the unnecessary settings files (they still work, but the single input file method is easier) and the MNIST model script. The ```grid``` template is always a solid starting point:
+Import a CANDLE template, which consists of an input file (```.in``` extension) and a "model script" (the script containing the machine/deep learning model you'd like to run). The ```grid``` template is always a solid starting point:
 
 ```bash
 candle import-template grid
-rm -f submit_candle_job.sh mnist_default_params.txt grid_workflow-mnist.txt README.txt mnist_mlp.py
 ```
 
-Clone Facebook's (they developed PyTorch) PyTorch examples repository:
+Note that if you were to run ```candle submit-job grid_example.in```, you would successfully submit (via SLURM's batch mode) a grid search HPO on the MNIST dataset. As we'd like to start from scratch (as opposed to an already CANDLE-compliant model script), we can get rid of the model script ```mnist_mlp.py``` that is part of our ```grid``` template:
+
+```bash
+rm -f mnist_mlp.py
+```
+
+You will be left with the template CANDLE input file ```grid_example.in```, which we will shortly modify to be used for the VAE.
+
+Clone the PyTorch examples repository:
 
 ```bash
 git clone https://github.com/pytorch/examples.git
 ```
 
-Remember, a prerequisite for using your model script with CANDLE is to make sure your model script runs standalone on Biowulf in the first place. Let's make sure the variational autoencoder (VAE) example you just downloaded works as-is on Biowulf:
+Remember, a prerequisite for running your model script with CANDLE is to make sure your model script runs standalone on Biowulf in the first place. Let's make sure the VAE example you just downloaded works as-is on Biowulf:
 
 ```bash
 cd examples/vae
@@ -80,12 +87,20 @@ Open up ```main.py``` in a text editor and comment out the first line by prepend
 #from __future__ import print_function
 ```
 
-This line is unnecessary anyway as long as you're following good practice and using an up-to-date version of Python. This followed this good practice by running ```module load python/3.6``` earlier to ensure that we didn't use Biowulf's system version of Python, which is an essentially unsupported version, 2.7.
+This line is unnecessary anyway as long as you're following good practice and using an up-to-date version of Python. We followed this good practice by running ```module load python/3.6``` earlier to ensure that we didn't use Biowulf's system version of Python, which is an essentially unsupported version, 2.7.
 
-Also, the script authors put the main code in a ```__name__ == "__main__"``` block, which is used for being able to use the script as a library. Since this is unnecessary in our case (we actually want to run the model script over and over directory, as opposed to using the functions contained in it as part of a library), let's comment out the line defining the block and un-indent the contents of the block:
+Also, the script authors put the main code in a ```__name__ == "__main__"``` block, which is used for being able to use the script as a library. Since this is unnecessary in our case (we actually want to run the model script over and over again, as opposed to using the functions contained in it as part of a library), let's (1) comment out the line defining the block and (2) un-indent the contents of the block:
 
 ```python
-#if __name__ == "__main__":
+# if __name__ == "__main__":
+#     for epoch in range(1, args.epochs + 1):
+#         train(epoch)
+#         test(epoch)
+#         with torch.no_grad():
+#             sample = torch.randn(64, 20).to(device)
+#             sample = model.decode(sample).cpu()
+#             save_image(sample.view(64, 1, 28, 28),
+#                        'results/sample_' + str(epoch) + '.png')
 for epoch in range(1, args.epochs + 1):
     train(epoch)
     test(epoch)
@@ -96,16 +111,96 @@ for epoch in range(1, args.epochs + 1):
                     'results/sample_' + str(epoch) + '.png')
 ```
 
-The only actual *required* modification to a model script is to return a value on which you want to base the hyperparameter optimization, such as the loss calculated by the model on a validation dataset. Let's use the ```test_loss``` variable the model script authors have already defined. Do this by returning ```test_loss``` from the ```test()``` function and then assigning it in the script's body to the variable ```val_to_return```:
+Finally, ```main.py```'s authors assumed a particular directory structure, whereas we want the script to run exactly where it is without assuming the presence of any other directories (which in this case is a ```data``` directory one level up and a ```results``` directory in the working directory). To address this, add these lines anywhere near the top of the script, e.g., right after the block of ```import``` statements:
+
+```python
+import os
+os.makedirs('data', exist_ok=True)
+os.makedirs('results', exist_ok=True)
+```
+
+Also, remove the ```../``` from the two lines containing ```datasets.MNIST('../data', ```, e.g.,
+
+```python
+train_loader = torch.utils.data.DataLoader(
+    #datasets.MNIST('../data', train=True, download=True,
+    datasets.MNIST('data', train=True, download=True,
+                   transform=transforms.ToTensor()),
+    batch_size=args.batch_size, shuffle=True, **kwargs)
+test_loader = torch.utils.data.DataLoader(
+    #datasets.MNIST('../data', train=False, transform=transforms.ToTensor()),
+    datasets.MNIST('data', train=False, transform=transforms.ToTensor()),
+    batch_size=args.batch_size, shuffle=True, **kwargs)
+```
+
+Note that all we've done so far is modify the model script ```main.py``` to make sure it can be used by CANDLE. While these sorts of changes are representative of common modifications you may need to make to models you find online, they have nothing in particular to do with CANDLE.
+
+```diff
+@@ -1,4 +1,3 @@
+-from __future__ import print_function
+ import argparse
+ import torch
+ import torch.utils.data
+@@ -8,6 +8,11 @@ from torchvision import datasets, transforms
+ from torchvision.utils import save_image
+ 
+ 
++import os
++os.makedirs('data', exist_ok=True)
++os.makedirs('results', exist_ok=True)
++
++
+ parser = argparse.ArgumentParser(description='VAE MNIST Example')
+ parser.add_argument('--batch-size', type=int, default=128, metavar='N',
+                     help='input batch size for training (default: 128)')
+@@ -28,11 +33,13 @@ device = torch.device("cuda" if args.cuda else "cpu")
+ 
+ kwargs = {'num_workers': 1, 'pin_memory': True} if args.cuda else {}
+ train_loader = torch.utils.data.DataLoader(
+-    datasets.MNIST('../data', train=True, download=True,
++    datasets.MNIST('data', train=True, download=True,
+                    transform=transforms.ToTensor()),
+     batch_size=args.batch_size, shuffle=True, **kwargs)
+ test_loader = torch.utils.data.DataLoader(
+-    datasets.MNIST('../data', train=False, transform=transforms.ToTensor()),
++    datasets.MNIST('data', train=False, transform=transforms.ToTensor()),
+     batch_size=args.batch_size, shuffle=True, **kwargs)
+ 
+ 
+@@ -121,12 +128,11 @@ def test(epoch):
+     test_loss /= len(test_loader.dataset)
+     print('====> Test set loss: {:.4f}'.format(test_loss))
+ 
+-if __name__ == "__main__":
+-    for epoch in range(1, args.epochs + 1):
+-        train(epoch)
+-        test(epoch)
+-        with torch.no_grad():
+-            sample = torch.randn(64, 20).to(device)
+-            sample = model.decode(sample).cpu()
+-            save_image(sample.view(64, 1, 28, 28),
+-                       'results/sample_' + str(epoch) + '.png')
++for epoch in range(1, args.epochs + 1):
++    train(epoch)
++    test(epoch)
++    with torch.no_grad():
++        sample = torch.randn(64, 20).to(device)
++        sample = model.decode(sample).cpu()
++        save_image(sample.view(64, 1, 28, 28),
++                    'results/sample_' + str(epoch) + '.png')
+```
+
+The only actual *required* modification to a model script is to return a value (called ```val_to_return```) on which you want to base the hyperparameter optimization, such as the loss calculated by the model on a validation dataset. Let's use the ```test_loss``` variable the model script authors have already defined. Do this by returning ```test_loss``` from the ```test()``` function and then assigning it in the script's body to the variable ```val_to_return```:
 
 ```python
     print('====> Test set loss: {:.4f}'.format(test_loss))
-    return(test_loss)
+    return(test_loss) # add this line to the end of the test() function
 
-#if __name__ == "__main__":
+...
+
 for epoch in range(1, args.epochs + 1):
     train(epoch)
-    val_to_return = test(epoch)
+    val_to_return = test(epoch) # assign the return value of test() to the "val_to_return" variable in the main part of the script
     with torch.no_grad():
 ```
 
@@ -259,28 +354,6 @@ candle generate-grid "['epochs',np.arange(2,11,2)]" "['batch_size',[64,128,256,5
 and place the contents of the generated file ```grid_workflow-XXXX.txt``` into the ```&param_space``` section of your input file (delete what's already there).
 
 In ```vae_with_pytorch.in``` set ```use_candle``` to ```1``` (or delete the setting altogether).
-
-Finally, ```main.py```'s authors assumed a particular directory structure, whereas we want the script to run wherever it's located. To address this, add these lines anywhere near the top of the script, e.g., right after the block of ```import``` statements:
-
-```python
-import os
-os.makedirs('data', exist_ok=True)
-os.makedirs('results', exist_ok=True)
-```
-
-Also, remove the ```../``` from the two lines containing ```datasets.MNIST('../data', ```, e.g.,
-
-```python
-train_loader = torch.utils.data.DataLoader(
-    #datasets.MNIST('../data', train=True, download=True,
-    datasets.MNIST('data', train=True, download=True,
-                   transform=transforms.ToTensor()),
-    batch_size=args.batch_size, shuffle=True, **kwargs)
-test_loader = torch.utils.data.DataLoader(
-    #datasets.MNIST('../data', train=False, transform=transforms.ToTensor()),
-    datasets.MNIST('data', train=False, transform=transforms.ToTensor()),
-    batch_size=args.batch_size, shuffle=True, **kwargs)
-```
 
 Finally, once again run:
 
