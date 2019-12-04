@@ -1,18 +1,29 @@
 ---
 bigimg: "/img/FNL_ATRF_Pano_4x10.jpg"
-title: Running a variational autoencoder using PyTorch with CANDLE on Biowulf
+title: CANDLE on Biowulf
+subtitle: "Exercise: Running a Variational Autoencoder using PyTorch"
 ---
+
+# Introduction
+
+This exercise will get you started running CANDLE on Biowulf. In particular, you will run a variational autoencoder (VAE) using PyTorch, a deep learning library developed at Facebook. A VAE is a type of generative model (capable of "generating" new samples) that has the advantage over the traditional autoencoder that the learned latent space is not discrete and instead is more or less "continuous." The following exercise does not require that you know anything about how VAEs work; you will simply download the example VAE provided by Facebook, make it "CANDLE-compliant," and perform a hyperparameter optimization on it using CANDLE.
+
+The exercise below consists of two main steps: (1) ensure that CANDLE can run the model by testing it first on a single interactive node on Biowulf, and (2) run a full hyperparameter optimization (HPO) on the model with CANDLE by submitting the job to Biowulf in the typical batch mode.
+
+After completing this exercise, you will know exactly how to perform HPO on your own model using CANDLE on Biowulf.
 
 # Links
----
 
-* This webpage: [https://cbiit.github.com/sdsi/vae_with_pytorch](https://cbiit.github.com/sdsi/vae_with_pytorch)
-* [Classroom presentation PDF](https://cbiit.github.com/sdsi/candle_on_biowulf-faes.pdf)
+* Classroom presentation PDFs:
+  * [George Zaki](mailto:george.zaki@nih.gov)'s presentation: [CANDLE: A Scalable Infrastructure to Accelerate Machine Learning Studies](faes-presentation-nov2019.pdf)
+  * [Andrew Weisman](mailto:andrew.weisman@nih.gov)'s presentation: [How to run CANDLE on Biowulf](candle_on_biowulf-faes.pdf)
+* [CANDLE on Biowulf homepage](https://cbiit.github.com/sdsi/candle)
 * [CANDLE on Biowulf documentation](https://hpc.nih.gov/apps/candle)
-* Feel free to contact [Andrew Weisman](mailto:andrew.weisman@nih.gov) or [George Zaki](mailto:george.zaki@nih.gov) for help with this exercise or with CANDLE in general
+* [This webpage](https://cbiit.github.com/sdsi/vae_with_pytorch)
 
 # Exercise
----
+
+## (1) Ensure, on an interactive SLURM node, that CANDLE can run the model
 
 Create and enter a working directory on your data partition on Biowulf, e.g.,
 
@@ -232,7 +243,7 @@ done
 
 Now take a look in ```subprocess_out_and_err.txt``` to ensure that our default settings had an effect. You should see now that only two epochs total have been run!
 
-# Homework
+## (2) Run HPO on the model using SLURM's batch mode using CANDLE
 
 Since it can take a while for jobs to pick up on Biowulf, you can try running a full hyperparamter optimization using CANDLE at home.
 
