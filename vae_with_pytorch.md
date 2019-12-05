@@ -1,7 +1,7 @@
 ---
 bigimg: "/img/FNL_ATRF_Pano_4x10.jpg"
 title: CANDLE on Biowulf
-subtitle: "Exercise: Running a Variational Autoencoder using PyTorch"
+subtitle: "Exercise: Running a Variational Autoencoder Using PyTorch"
 ---
 
 # Introduction
@@ -11,7 +11,7 @@ This exercise will get you started running [CANDLE](https://cbiit.github.com/sds
 
 The exercise below consists of two main steps: (1) ensure that CANDLE can run the model by testing it first on a single interactive node on Biowulf, and (2) run a full hyperparameter optimization (HPO) on the model with CANDLE by submitting the job to Biowulf in the typical batch mode.
 
-After completing this exercise, you will know exactly how to perform HPO on your own model using CANDLE on Biowulf.
+After completing this exercise, you will know exactly how to perform HPO on your own model using CANDLE on Biowulf. Along the way, you will have learned to follow good practices for doing so.
 
 # Links
 ---
@@ -135,6 +135,8 @@ test_loader = torch.utils.data.DataLoader(
 
 Note that all we've done so far is modify the model script ```main.py``` to make sure it can be used by CANDLE. While these sorts of changes are representative of common modifications you may need to make to models you find online, they have nothing in particular to do with CANDLE.
 
+Here is a "diff" summary of the changes we have made to ```main.py``` so far:
+
 ```diff
 @@ -1,4 +1,3 @@
 -from __future__ import print_function
@@ -200,6 +202,7 @@ The only actual *required* modification to a model script is to return a value (
 
 for epoch in range(1, args.epochs + 1):
     train(epoch)
+    #test(epoch)
     val_to_return = test(epoch) # assign the return value of test() to the "val_to_return" variable in the main part of the script
     with torch.no_grad():
 ```
@@ -212,23 +215,23 @@ Move the template CANDLE input file you imported earlier into the current direct
 mv ../../grid_example.in vae_with_pytorch.in
 ```
 
-Open up this file in a text editor and change the ```model_script``` variable to the model script we'd like to use, ```main.py```. Since we're using a non-default deep learning library backend (the default is ```keras```), create a variable called ```dl_backend``` and set its value to ```pytorch```. Also, since we want to just run the test script using CANDLE once in interactive mode (as opposed to running a workflow), define a ```use_candle``` variable in the ```&control``` section and set its value to ```0```:
+Open up this input file ```vae_with_pytorch.in``` in a text editor and change the ```model_script``` variable to the model script we'd like to use, ```main.py```, instead of the one in there by default, ```mnist_mlp.py```. (It's best to always use absolute pathnames; that's why the ```$(pwd)/``` in the assignment below.) Since we're using a non-default deep learning library backend (the default is ```keras```), also in the ```&control``` section create a variable called ```dl_backend``` and set its value to ```pytorch```. Also, since we want to just run the test script using CANDLE once in interactive mode (as opposed to running a workflow like HPO), define a ```use_candle``` variable and set its value to ```0```:
 
 ```
 &control
   model_script="$(pwd)/main.py"
+  dl_backend="pytorch"
+  use_candle=0
   workflow="grid"
   ngpus=2
   gpu_type="k80"
   walltime="00:20:00"
-  dl_backend="pytorch"
-  use_candle=0
 /
 ```
 
-For the time being, we need to refrain from having spaces around the equals sign in the ```&control``` section of the input file, just as in a Bash script. We will remove this requirement in the near future.
+Note that for the time being, we need to refrain from having spaces around the equals sign in the ```&control``` section of the input file, just as in a Bash script. We will remove this requirement in the near future.
 
-The other variables in the ```&control``` section, and the other two sections, don't really matter... again, we just want to make sure CANDLE can run the file once on using the currently assigned K20x GPU.
+The other variables in the ```&control``` section, and the other two sections, don't really matter... again, we just want to make sure CANDLE can run the file once using the currently assigned K20x GPU. (Normally at this point the settings in the ```&default_model``` section of the input file *would* matter, but we didn't yet define these hyperparameters in the model script ```main.py```. We will do this soon!)
 
 Now "submit" the CANDLE input file. Note that by setting ```use_candle=0``` we're telling CANDLE to run the script interactively, as opposed to "submitting" the script to SLURM in batch mode:
 
@@ -236,7 +239,7 @@ Now "submit" the CANDLE input file. Note that by setting ```use_candle=0``` we'r
 candle submit-job vae_with_pytorch.in
 ```
 
-While you won't see the output of the script directly in the terminal like in before, it is being written to a file called ```subprocess_out_and_err.txt```. (Feel free to log into the interactive node you've been assigned from Biowulf [e.g., ```ssh cn0605```] and run ```watch nvidia-smi```) to see the GPU running. Or just watch the contents of ```subprocess_out_and_err.txt```.)
+While you won't see the output of the script directly in the terminal like as before, it is being written to a file called ```subprocess_out_and_err.txt``` in your working directory. (Feel free to log in to the interactive node you've been assigned from Biowulf [e.g., ```ssh cn0605```] and run ```watch nvidia-smi``` to see the GPU running. Or just watch the contents of ```subprocess_out_and_err.txt```.) Whenever you run CANDLE, the output of what you'd expect from running the model outside of CANDLE will always be in a file called ```subprocess_out_and_err.txt```. If you run CANDLE interactively (i.e., on an interactive node using the ```use_candle=0``` setting), this file will be located in your working directory; if you run CANDLE in batch mode (as we will in the second part of this exercise), there will be one file ```subprocess_out_and_err.txt``` in each of the directories in the ```last-exp/run``` folder.
 
 The overall output to the terminal should look something like this:
 
@@ -279,7 +282,6 @@ done
 Finally, let's set define some hyperparameters in the model script. The general idea is to replace anything you want to modify during a hyperparameter optimization with a dictionary called ```hyperparams```, defining the hyperparameter name using the dictionary "key." For example, let's make the first three possible script arguments hyperparameters:
 
 ```python
-parser = argparse.ArgumentParser(description='VAE MNIST Example')
 #parser.add_argument('--batch-size', type=int, default=128, metavar='N',
 parser.add_argument('--batch-size', type=int, default=hyperparams['batch_size'], metavar='N',
                     help='input batch size for training (default: 128)')
@@ -301,7 +303,7 @@ In the ```&default_model``` section of the CANDLE input file, set the default va
 /
 ```
 
-Now try running the script again using CANDLE, checking to see that the default values of the hyperparameters we set in the input file actually have an effect (note that we set ```epochs=2```):
+Now try running the model script again using CANDLE, checking to see that the default values of the hyperparameters we set in the input file actually have an effect (note in particular that we set ```epochs=2```):
 
 ```bash
 candle submit-job vae_with_pytorch.in
@@ -339,26 +341,155 @@ Finished run of model_wrapper.sh from candle_compliant_wrapper.py
 done
 ```
 
-Now take a look in ```subprocess_out_and_err.txt``` to ensure that our default settings had an effect. You should see now that only two epochs total have been run!
+Finally, take a look in ```subprocess_out_and_err.txt``` to ensure that the default settings we specified in the ```&default_model``` section of the input file ```vae_with_pytorch.in``` had an effect when CANDLE ran the model script ```main.py```. You should see now that only two epochs total have been run!
+
+Here is a "diff" summary of the CANDLE-related changes we made to the model script reinforcing that generally just two simple changes need to be made to your model script in order to make it CANDLE-compliant: (1) specifying the hyperparameters in the ```hyperparams``` dictionary and (2) returning a metric of a hyperparameter set such as the validation loss in the ```val_to_return``` variable:
+
+```diff
+@@ -14,11 +14,14 @@ os.makedirs('results', exist_ok=True)
+ 
+ 
+ parser = argparse.ArgumentParser(description='VAE MNIST Example')
+-parser.add_argument('--batch-size', type=int, default=128, metavar='N',
++parser.add_argument('--batch-size', type=int, default=hyperparams['batch_size'], metavar='N',
+                     help='input batch size for training (default: 128)')
+-parser.add_argument('--epochs', type=int, default=10, metavar='N',
++parser.add_argument('--epochs', type=int, default=hyperparams['epochs'], metavar='N',
+                     help='number of epochs to train (default: 10)')
+-parser.add_argument('--no-cuda', action='store_true', default=False,
++parser.add_argument('--no-cuda', action='store_true', default=hyperparams['no_cuda'],
+                     help='enables CUDA training')
+ parser.add_argument('--seed', type=int, default=1, metavar='S',
+                     help='random seed (default: 1)')
+@@ -127,6 +130,7 @@ def test(epoch):
+ 
+     test_loss /= len(test_loader.dataset)
+     print('====> Test set loss: {:.4f}'.format(test_loss))
++    return(test_loss)
+ 
+@@ -139,7 +143,8 @@ def test(epoch):
+ for epoch in range(1, args.epochs + 1):
+     train(epoch)
+-    test(epoch)
++    val_to_return = test(epoch)
+     with torch.no_grad():
+         sample = torch.randn(64, 20).to(device)
+         sample = model.decode(sample).cpu()
+```
+
+A complete, final version of ```main.py``` can be found [here](main.py).
 
 ## (2) Run HPO on the model using SLURM's batch mode using CANDLE
 
-Since it can take a while for jobs to pick up on Biowulf, you can try running a full hyperparamter optimization using CANDLE at home.
+Now we want to run a full HPO on the VAE model script. We have already defined what the hyperparameters are in the script and what their default values should be; now we just need to define the space of hyperparameters we'd like the HPO to use.
 
-Run on the command line:
+For demonstration purposes, let's vary two out of the three already-defined hyperparameters in a grid search. Run on the command line:
 
 ```bash
 candle generate-grid "['epochs',np.arange(2,11,2)]" "['batch_size',[64,128,256,512,1024]]"
 ```
 
-and place the contents of the generated file ```grid_workflow-XXXX.txt``` into the ```&param_space``` section of your input file (delete what's already there).
+and place the contents of the generated file ```grid_workflow-XXXX.txt``` into the ```&param_space``` section of your input file (delete what's currently there).
 
-In ```vae_with_pytorch.in``` set ```use_candle``` to ```1``` (or delete the setting altogether).
+In the input file ```vae_with_pytorch.in``` set ```use_candle``` to ```1``` (or delete the setting altogether, as ```1``` is the default value). This tells CANDLE to submit the HPO job defined in the input file to the SLURM scheduler in batch mode, as opposed to running the script just once on the current machine using the default hyperparameter values. Your final input file should look something like this:
 
-Finally, once again run:
+```
+&control
+  model_script="$(pwd)/main.py"
+  dl_backend="pytorch"
+  use_candle=1
+  workflow="grid"
+  ngpus=2
+  gpu_type="k80"
+  walltime="00:20:00"
+/
+
+&default_model
+  epochs = 2
+  batch_size=128
+  no_cuda = False
+/
+
+&param_space
+{"id": "hpset_00001", "epochs": 2, "batch_size": 64}
+{"id": "hpset_00002", "epochs": 2, "batch_size": 128}
+{"id": "hpset_00003", "epochs": 2, "batch_size": 256}
+{"id": "hpset_00004", "epochs": 2, "batch_size": 512}
+{"id": "hpset_00005", "epochs": 2, "batch_size": 1024}
+{"id": "hpset_00006", "epochs": 4, "batch_size": 64}
+{"id": "hpset_00007", "epochs": 4, "batch_size": 128}
+{"id": "hpset_00008", "epochs": 4, "batch_size": 256}
+{"id": "hpset_00009", "epochs": 4, "batch_size": 512}
+{"id": "hpset_00010", "epochs": 4, "batch_size": 1024}
+{"id": "hpset_00011", "epochs": 6, "batch_size": 64}
+{"id": "hpset_00012", "epochs": 6, "batch_size": 128}
+{"id": "hpset_00013", "epochs": 6, "batch_size": 256}
+{"id": "hpset_00014", "epochs": 6, "batch_size": 512}
+{"id": "hpset_00015", "epochs": 6, "batch_size": 1024}
+{"id": "hpset_00016", "epochs": 8, "batch_size": 64}
+{"id": "hpset_00017", "epochs": 8, "batch_size": 128}
+{"id": "hpset_00018", "epochs": 8, "batch_size": 256}
+{"id": "hpset_00019", "epochs": 8, "batch_size": 512}
+{"id": "hpset_00020", "epochs": 8, "batch_size": 1024}
+{"id": "hpset_00021", "epochs": 10, "batch_size": 64}
+{"id": "hpset_00022", "epochs": 10, "batch_size": 128}
+{"id": "hpset_00023", "epochs": 10, "batch_size": 256}
+{"id": "hpset_00024", "epochs": 10, "batch_size": 512}
+{"id": "hpset_00025", "epochs": 10, "batch_size": 1024}
+/
+```
+
+Note that while we are not varying the third hyperparameter ```no_cuda``` in the hyperparameter space specified in the ```&param_space``` section of the input file, CANDLE knows what value to set it to in the model script because this is specified in the ```&default_model``` section of the input file.
+
+Finally, once again submit the CANDLE job:
 
 ```bash
 candle submit-job vae_with_pytorch.in
 ```
 
-Now, once your job picks up by SLURM on Biowulf, a grid search using CANDLE should run!
+Now, once your job picks up by SLURM on Biowulf, a grid search using CANDLE should run, taking about 15 minutes to complete.
+
+The results of the grid search HPO are located in a subdirectory within the ```experiments``` directory. Feel free to tweak the hyperparameter space or anything else and run another CANDLE job; every time you do, another subdirectory will be generated in ```experiments```. As a matter of convenience, CANDLE generates a symbolic link in your working directory called ```last-exp``` to the latest experiment (i.e., CANDLE job) that you ran.
+
+The general point of a hyperparameter optimization is to determine the best set of hyperparameters to use in your model, where you've defined some metric of how well each set of hyperparameters performed. In this exercise we are evaluating how the number of epochs and batch size affect how well the variational autoencoder performs on test set as measured by the loss calculated on the test set. We have specified this loss in CANDLE by assigning it to the ```val_to_return``` variable in the model script.
+
+In order to easily evaluate how the different sets of hyperparameters affect the test loss in our experiment, we can collect all values of the hyperparameters and test loss into a single CSV file by running:
+
+```bash
+candle aggregate-results $(pwd)/last-exp
+```
+
+Note that the directory that's the second argument to ```candle```, as usual in CANDLE, must be an absolute path; that's why the ```$(pwd)```.
+
+This produces a file in the working directory called ```candle_results.csv``` and should look something like this:
+
+```
+result,dirname,id,epochs,batch_size
+105.624,hpset_00022,hpset_00022,10,128
+105.705,hpset_00016,hpset_00016,8,64
+105.726,hpset_00021,hpset_00021,10,64
+106.241,hpset_00017,hpset_00017,8,128
+106.731,hpset_00011,hpset_00011,6,64
+106.952,hpset_00023,hpset_00023,10,256
+107.664,hpset_00012,hpset_00012,6,128
+108.353,hpset_00006,hpset_00006,4,64
+108.365,hpset_00018,hpset_00018,8,256
+109.939,hpset_00007,hpset_00007,4,128
+110.033,hpset_00013,hpset_00013,6,256
+110.203,hpset_00024,hpset_00024,10,512
+112.136,hpset_00019,hpset_00019,8,512
+112.386,hpset_00001,hpset_00001,2,64
+113.825,hpset_00008,hpset_00008,4,256
+115.138,hpset_00014,hpset_00014,6,512
+116.039,hpset_00025,hpset_00025,10,1024
+116.362,hpset_00002,hpset_00002,2,128
+119.596,hpset_00020,hpset_00020,8,1024
+121.821,hpset_00009,hpset_00009,4,512
+125.091,hpset_00003,hpset_00003,2,256
+125.765,hpset_00015,hpset_00015,6,1024
+138.186,hpset_00010,hpset_00010,4,1024
+141.458,hpset_00004,hpset_00004,2,512
+166.273,hpset_00005,hpset_00005,2,1024
+```
+
+The ```result``` (first column) is the value specified in your model script by ```val_to_return``` and is followed (after some label columns) by columns of the hyperparameters that you varied, which in this case are ```epochs``` and ```batch_size```. The results are sorted by increasing ```result``` and here show that the best values of ```epochs``` and ```batch_size``` to use (i.e., those that minimize the test loss values in the ```result``` column) are ```epochs~[8,10], batch_size~[64,128]```. In this case, training the VAE for fewer epochs using larger batch sizes produces worse results, i.e., higher losses on the test dataset.
