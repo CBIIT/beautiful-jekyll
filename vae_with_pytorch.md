@@ -409,7 +409,7 @@ candle submit-job vae_with_pytorch.in
 
 Now, once your job picks up by SLURM on Biowulf, a grid search using CANDLE should run, taking about 15 minutes to complete.
 
-The results of the grid search HPO are located in a subdirectory within the ```experiments``` directory. Feel free to tweak the hyperparameter space or anything else and run another CANDLE job; every time you do, another subdirectory will be generated in ```experiments```. As a matter of convenience, CANDLE generates a symbolic link in your working directory called ```last-exp``` to the latest experiment (i.e., CANDLE job) that you ran.
+The results of the grid search HPO are located in a subdirectory within the ```experiments``` directory. Feel free to tweak the hyperparameter space or anything else and run another CANDLE job; every time you do, another subdirectory will be generated in ```experiments```. As a matter of convenience, CANDLE generates a symbolic link in your working directory called ```last-exp``` to the last experiment (i.e., CANDLE job) that you ran.
 
 The general point of a hyperparameter optimization is to determine the best set of hyperparameters to use in your model, where you've defined some metric of how well each set of hyperparameters performed. In this exercise we are evaluating how the number of epochs and batch size affect how well the variational autoencoder performs on the test set as measured by the loss calculated on the test set. We have specified this loss in CANDLE by assigning it to the ```val_to_return``` variable in the model script.
 
