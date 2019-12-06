@@ -55,7 +55,7 @@ Import a CANDLE template, which consists of an input file (```.in``` extension) 
 candle import-template grid
 ```
 
-Note that if you were to run ```candle submit-job grid_example.in```, you would successfully submit (via SLURM's batch mode) a grid search HPO on the MNIST dataset. As we'd like to start from scratch (as opposed to an already CANDLE-compliant model script), we can get rid of the model script ```mnist_mlp.py``` that is part of our ```grid``` template:
+Note that if you were to run ```candle submit-job grid_example.in```, you would successfully submit (via SLURM's batch mode) a grid search HPO on the MNIST dataset. As we'd like to start from scratch (as opposed to using an already CANDLE-compliant model script), we can get rid of the model script ```mnist_mlp.py``` that is part of our ```grid``` template:
 
 ```bash
 rm -f mnist_mlp.py
@@ -89,29 +89,7 @@ Open up ```main.py``` in a text editor and comment out the first line by prepend
 
 This line is unnecessary anyway as long as you're following good practice and using an up-to-date version of Python. We followed this good practice by running ```module load python/3.6``` earlier to ensure that we didn't use Biowulf's system version of Python, which is an essentially unsupported version, 2.7.
 
-Also, the script authors put the main code in a ```__name__ == "__main__"``` block, which is used for being able to use the script as a library. Since this is unnecessary in our case (we actually want to run the model script over and over again, as opposed to using the functions contained in it as part of a library), let's (1) comment out the line defining the block and (2) un-indent the contents of the block:
-
-```python
-# if __name__ == "__main__":
-#     for epoch in range(1, args.epochs + 1):
-#         train(epoch)
-#         test(epoch)
-#         with torch.no_grad():
-#             sample = torch.randn(64, 20).to(device)
-#             sample = model.decode(sample).cpu()
-#             save_image(sample.view(64, 1, 28, 28),
-#                        'results/sample_' + str(epoch) + '.png')
-for epoch in range(1, args.epochs + 1):
-    train(epoch)
-    test(epoch)
-    with torch.no_grad():
-        sample = torch.randn(64, 20).to(device)
-        sample = model.decode(sample).cpu()
-        save_image(sample.view(64, 1, 28, 28),
-                    'results/sample_' + str(epoch) + '.png')
-```
-
-Finally, ```main.py```'s authors assumed a particular directory structure, whereas we want the script to run exactly where it is without assuming the presence of any other directories (which in this case is a ```data``` directory one level up and a ```results``` directory in the working directory). To address this, add these lines anywhere near the top of the script, e.g., right after the block of ```import``` statements:
+Also, ```main.py```'s authors assumed a particular directory structure, whereas we want the script to run exactly where it is without assuming the presence of any other directories (which in this case is a ```data``` directory one level up and a ```results``` directory in the working directory). To address this, add these lines anywhere near the top of the script, e.g., right after the block of ```import``` statements:
 
 ```python
 import os
@@ -172,24 +150,6 @@ Here is a "diff" summary of the changes we have made to ```main.py``` so far:
 @@ -121,12 +128,11 @@ def test(epoch):
      test_loss /= len(test_loader.dataset)
      print('====> Test set loss: {:.4f}'.format(test_loss))
- 
--if __name__ == "__main__":
--    for epoch in range(1, args.epochs + 1):
--        train(epoch)
--        test(epoch)
--        with torch.no_grad():
--            sample = torch.randn(64, 20).to(device)
--            sample = model.decode(sample).cpu()
--            save_image(sample.view(64, 1, 28, 28),
--                       'results/sample_' + str(epoch) + '.png')
-+for epoch in range(1, args.epochs + 1):
-+    train(epoch)
-+    test(epoch)
-+    with torch.no_grad():
-+        sample = torch.randn(64, 20).to(device)
-+        sample = model.decode(sample).cpu()
-+        save_image(sample.view(64, 1, 28, 28),
-+                    'results/sample_' + str(epoch) + '.png')
 ```
 
 The only actual *required* modification to a model script is to return a value (called ```val_to_return```) on which you want to base the hyperparameter optimization, such as the loss calculated by the model on a validation dataset. Let's use the ```test_loss``` variable the model script authors have already defined. Do this by returning ```test_loss``` from the ```test()``` function and then assigning it in the script's body to the variable ```val_to_return```:
@@ -233,13 +193,13 @@ Note that for the time being, we need to refrain from having spaces around the e
 
 The other variables in the ```&control``` section, and the other two sections, don't really matter... again, we just want to make sure CANDLE can run the file once using the currently assigned K20x GPU. (Normally at this point the settings in the ```&default_model``` section of the input file *would* matter, but we didn't yet define these hyperparameters in the model script ```main.py```. We will do this soon!)
 
-Now "submit" the CANDLE input file. Note that by setting ```use_candle=0``` we're telling CANDLE to run the script interactively, as opposed to "submitting" the script to SLURM in batch mode:
+Now "submit" the CANDLE input file. Note that by setting ```use_candle=0``` we're telling CANDLE to run the script interactively, as opposed to "submitting" the script to SLURM in batch mode.
 
 ```bash
 candle submit-job vae_with_pytorch.in
 ```
 
-While you won't see the output of the script directly in the terminal like as before, it is being written to a file called ```subprocess_out_and_err.txt``` in your working directory. (Feel free to log in to the interactive node you've been assigned from Biowulf [e.g., ```ssh cn0605```] and run ```watch nvidia-smi``` to see the GPU running. Or just watch the contents of ```subprocess_out_and_err.txt```.) Whenever you run CANDLE, the output of what you'd expect from running the model outside of CANDLE will always be in a file called ```subprocess_out_and_err.txt```. If you run CANDLE interactively (i.e., on an interactive node using the ```use_candle=0``` setting), this file will be located in your working directory; if you run CANDLE in batch mode (as we will in the second part of this exercise), there will be one file ```subprocess_out_and_err.txt``` in each of the directories in the ```last-exp/run``` folder.
+While you won't see the output of the script directly in the terminal as before, it is being written to a file called ```subprocess_out_and_err.txt``` in your working directory. (Feel free to log in to the interactive node you've been assigned from Biowulf [e.g., ```ssh cn0605```] and run ```watch nvidia-smi``` to see the GPU running. Or just watch the contents of ```subprocess_out_and_err.txt```.) Whenever you run CANDLE, the output of what you'd expect from running the model outside of CANDLE will always be in a file called ```subprocess_out_and_err.txt```. If you run CANDLE interactively (i.e., on an interactive node using the ```use_candle=0``` setting), this file will be located in your working directory; if you run CANDLE in batch mode (as we will in the second part of this exercise), there will be one file ```subprocess_out_and_err.txt``` in each of the directories in the ```last-exp/run``` folder.
 
 The overall output to the terminal should look something like this:
 
@@ -343,7 +303,7 @@ done
 
 Finally, take a look in ```subprocess_out_and_err.txt``` to ensure that the default settings we specified in the ```&default_model``` section of the input file ```vae_with_pytorch.in``` had an effect when CANDLE ran the model script ```main.py```. You should see now that only two epochs total have been run!
 
-Here is a "diff" summary of the CANDLE-related changes we made to the model script reinforcing that generally just two simple changes need to be made to your model script in order to make it CANDLE-compliant: (1) specifying the hyperparameters in the ```hyperparams``` dictionary and (2) returning a metric of a hyperparameter set such as the validation loss in the ```val_to_return``` variable:
+Here is a "diff" summary of the CANDLE-related changes we made to the model script reinforcing that generally just two simple changes need to be made to your model script in order to make it CANDLE-compliant: (1) specifying the hyperparameters in the ```hyperparams``` dictionary and (2) returning a metric of the performance of a hyperparameter set such as the validation loss in the ```val_to_return``` variable:
 
 ```diff
 @@ -14,11 +14,14 @@ os.makedirs('results', exist_ok=True)
@@ -451,9 +411,9 @@ Now, once your job picks up by SLURM on Biowulf, a grid search using CANDLE shou
 
 The results of the grid search HPO are located in a subdirectory within the ```experiments``` directory. Feel free to tweak the hyperparameter space or anything else and run another CANDLE job; every time you do, another subdirectory will be generated in ```experiments```. As a matter of convenience, CANDLE generates a symbolic link in your working directory called ```last-exp``` to the latest experiment (i.e., CANDLE job) that you ran.
 
-The general point of a hyperparameter optimization is to determine the best set of hyperparameters to use in your model, where you've defined some metric of how well each set of hyperparameters performed. In this exercise we are evaluating how the number of epochs and batch size affect how well the variational autoencoder performs on test set as measured by the loss calculated on the test set. We have specified this loss in CANDLE by assigning it to the ```val_to_return``` variable in the model script.
+The general point of a hyperparameter optimization is to determine the best set of hyperparameters to use in your model, where you've defined some metric of how well each set of hyperparameters performed. In this exercise we are evaluating how the number of epochs and batch size affect how well the variational autoencoder performs on the test set as measured by the loss calculated on the test set. We have specified this loss in CANDLE by assigning it to the ```val_to_return``` variable in the model script.
 
-In order to easily evaluate how the different sets of hyperparameters affect the test loss in our experiment, we can collect all values of the hyperparameters and test loss into a single CSV file by running:
+After the HPO job is complete, in order to easily evaluate how the different sets of hyperparameters affect the calculated test loss in our experiment, we can collect all values of the hyperparameters and test loss into a single CSV file by running:
 
 ```bash
 candle aggregate-results $(pwd)/last-exp
@@ -493,3 +453,12 @@ result,dirname,id,epochs,batch_size
 ```
 
 The ```result``` (first column) is the value specified in your model script by ```val_to_return``` and is followed (after some label columns) by columns of the hyperparameters that you varied, which in this case are ```epochs``` and ```batch_size```. The results are sorted by increasing ```result``` and here show that the best values of ```epochs``` and ```batch_size``` to use (i.e., those that minimize the test loss values in the ```result``` column) are ```epochs~[8,10], batch_size~[64,128]```. In this case, training the VAE for fewer epochs using larger batch sizes produces worse results, i.e., higher losses on the test dataset.
+
+# Summary and next steps
+---
+
+You have just taken a cutting-edge deep learning model (a variational autoencoder) straight from a reliable online model repository (PyTorch's own ```examples``` repository) and made a minimal number of modifications to it in order to make it "CANDLE-compliant." You then ran a small hyperparameter optimization (a grid search) on the model using CANDLE on Biowulf in order to determine which set of hyperparameters makes the model perform optimally, which you defined as that which minimizes the loss calculated on the test dataset. To do this you modified a single template input file that you brought into your working directory using ```candle import-template grid```.
+
+While CANDLE is more than just software for hyperparameter optimization (HPO), it excels at this task, which is crucial for developing the best possible model for a particular problem. You now know the exact steps you need to take in order to successfully perform HPO on your own model/data. Feel free to consult the CANDLE on Biowulf [user guide](https://hpc.nih.gov/apps/candle) to learn more. In particular, if you are interested in performing a Bayesian hyperparameter search (as opposed to a grid hyperparameter search), a good place to start is by studying the ```bayesian``` template input file that can be copied over using ```candle import-template bayesian```. Finally, CANDLE is more than capable of running HPO on models written in the ```R``` programming language; try running the example obtained using ```candle import-template r``` in order to see this at work.
+
+Please [contact us](mailto:andrew.weisman@nih.gov) if you have any questions, comments, or suggestions about improving the above exercise or if you need help using CANDLE's HPO functionality for your own needs. We are happy to help! Stay in the know about CANDLE updates on Biowulf by tuning in to the CANDLE [homepage](https://cbiit.github.com/sdsi/candle). In addition, if you are interested in joining a CANDLE-users NIH listserv (we are gauging interest), please let us know as well.
