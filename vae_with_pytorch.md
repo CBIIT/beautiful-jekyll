@@ -1,5 +1,6 @@
 ---
 layout: post
+date: 2019-12-02
 bigimg: "/img/FNL_ATRF_Pano_4x10.jpg"
 title: CANDLE on Biowulf
 subtitle: "Exercise: Running a Variational Autoencoder Using PyTorch"
