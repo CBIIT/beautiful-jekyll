@@ -1,4 +1,5 @@
 ---
+layout: post
 bigimg: "/img/FNL_ATRF_Pano_4x10.jpg"
 title: CANDLE on Biowulf
 subtitle: "Exercise: Running a Variational Autoencoder Using PyTorch"
@@ -16,12 +17,11 @@ After completing this exercise, you will know exactly how to perform HPO on your
 # Links
 ---
 
-* Classroom presentation PDFs:
+* NIH FAES BIOF 399 presentation PDFs:
   * [George Zaki](mailto:george.zaki@nih.gov)'s presentation: [CANDLE: A Scalable Infrastructure to Accelerate Machine Learning Studies](faes-presentation-nov2019.pdf)
   * [Andrew Weisman](mailto:andrew.weisman@nih.gov)'s presentation: [How to run CANDLE on Biowulf](candle_on_biowulf-faes.pdf)
 * CANDLE on Biowulf [homepage](https://cbiit.github.com/sdsi/candle)
 * CANDLE on Biowulf [documentation](https://hpc.nih.gov/apps/candle)
-* [This webpage](https://cbiit.github.com/sdsi/vae_with_pytorch)
 
 # Exercise
 ---
@@ -41,13 +41,11 @@ Start an interactive SLURM session on Biowulf:
 sinteractive --gres=gpu:k20x:1 --mem=60G --cpus-per-task=16
 ```
 
-Once the interactive session has been provisioned, load the development version of CANDLE in order to use the latest CANDLE features (these will be ported over to the main candle module this week):
+Once the interactive session has been provisioned, load the ```candle``` module:
 
 ```bash
-module load candle/dev
+module load candle
 ```
-
-**Note:** Once the main CANDLE module is updated, you only need to run ```module load candle``` as usual.
 
 Import a CANDLE template, which consists of an input file (```.in``` extension) and a "model script" (the script containing the machine/deep learning model you'd like to run). The ```grid``` template is always a solid starting point:
 
@@ -55,13 +53,7 @@ Import a CANDLE template, which consists of an input file (```.in``` extension) 
 candle import-template grid
 ```
 
-Note that if you were to run ```candle submit-job grid_example.in```, you would successfully submit (via SLURM's batch mode) a grid search HPO on the MNIST dataset. As we'd like to start from scratch (as opposed to using an already CANDLE-compliant model script), we can get rid of the model script ```mnist_mlp.py``` that is part of our ```grid``` template:
-
-```bash
-rm -f mnist_mlp.py
-```
-
-You will be left with the template CANDLE input file ```grid_example.in```, which we will shortly modify to be used for the VAE.
+Note that if you were to run ```candle submit-job grid_example.in```, you would successfully submit (via SLURM's batch mode) a grid search HPO on the MNIST dataset. As we'd like to start from scratch (as opposed to using an already CANDLE-compliant model script), we can ignore the model script ```mnist_mlp.py``` and will focus on the template CANDLE input file, ```grid_example.in```, which we will shortly modify to be used for the VAE.
 
 Clone the PyTorch examples repository:
 
@@ -87,7 +79,7 @@ Open up ```main.py``` in a text editor and comment out the first line by prepend
 #from __future__ import print_function
 ```
 
-This line is unnecessary anyway as long as you're following good practice and using an up-to-date version of Python. We followed this good practice by running ```module load python/3.6``` earlier to ensure that we didn't use Biowulf's system version of Python, which is an essentially unsupported version, 2.7.
+This line is unnecessary anyway as long as you're following good practice and using an up-to-date version of Python. We followed this good practice by running ```module load python/3.6``` earlier. (By default, CANDLE will always load a recent version of Python.)
 
 Also, ```main.py```'s authors assumed a particular directory structure, whereas we want the script to run exactly where it is without assuming the presence of any other directories (which in this case is a ```data``` directory one level up and a ```results``` directory in the working directory). To address this, add these lines anywhere near the top of the script, e.g., right after the block of ```import``` statements:
 
@@ -158,21 +150,20 @@ The only actual *required* modification to a model script is to return a value (
     print('====> Test set loss: {:.4f}'.format(test_loss))
     return(test_loss) # add this line to the end of the test() function
 
-...
-
-for epoch in range(1, args.epochs + 1):
-    train(epoch)
-    #test(epoch)
-    val_to_return = test(epoch) # assign the return value of test() to the "val_to_return" variable in the main part of the script
-    with torch.no_grad():
+if __name__ == "__main__":
+    for epoch in range(1, args.epochs + 1):
+        train(epoch)
+        #test(epoch)
+        val_to_return = test(epoch) # assign the return value of test() to the "val_to_return" variable in the main part of the script
+        with torch.no_grad():
 ```
 
 We have not yet defined any hyperparameters within the script, but at least it should now run using CANDLE; let's test that.
 
-Move the template CANDLE input file you imported earlier into the current directory, renaming it to something more meaningful for this exercise:
+Copy the template CANDLE input file you imported earlier into the current directory, renaming it to something more meaningful for this exercise:
 
 ```bash
-mv ../../grid_example.in vae_with_pytorch.in
+cp ../../grid_example.in vae_with_pytorch.in
 ```
 
 Open up this input file ```vae_with_pytorch.in``` in a text editor and change the ```model_script``` variable to the model script we'd like to use, ```main.py```, instead of the one in there by default, ```mnist_mlp.py```. (It's best to always use absolute pathnames; that's why the ```$(pwd)/``` in the assignment below.) Since we're using a non-default deep learning library backend (the default is ```keras```), also in the ```&control``` section create a variable called ```dl_backend``` and set its value to ```pytorch```. Also, since we want to just run the test script using CANDLE once in interactive mode (as opposed to running a workflow like HPO), define a ```use_candle``` variable and set its value to ```0```:
