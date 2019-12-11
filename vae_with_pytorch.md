@@ -11,7 +11,7 @@ subtitle: "Exercise: Running a Variational Autoencoder Using PyTorch"
 
 This exercise will get you started running [CANDLE](https://cbiit.github.com/sdsi/candle) on Biowulf. In particular, you will run a [variational autoencoder (VAE)](https://www.google.com/search?q=variational+autoencoder) using [PyTorch](https://pytorch.org), a deep learning library developed by Facebook. A VAE is a type of generative model (capable of "generating" new samples) that has the advantage over the traditional autoencoder that the learned latent space is not discrete and is instead more or less "continuous." The following exercise does not require that you know anything about how VAEs work; you will simply download the example VAE provided by Facebook, make it "CANDLE-compliant," and perform a hyperparameter optimization on it using CANDLE.
 
-The exercise below consists of two main steps: (1) ensure that CANDLE can run the model by testing it first on a single interactive node on Biowulf, and (2) run a full hyperparameter optimization (HPO) on the model with CANDLE by submitting the job to Biowulf in the typical batch mode.
+The exercise below consists of two parts: (1) ensuring that CANDLE can run the model by testing it first on a single interactive node on Biowulf, and (2) running a full hyperparameter optimization (HPO) on the model with CANDLE by submitting the job to Biowulf in the typical batch mode.
 
 After completing this exercise, you will know exactly how to perform HPO on your own model using CANDLE on Biowulf. Along the way, you will have learned to follow good practices for doing so.
 
@@ -27,7 +27,7 @@ After completing this exercise, you will know exactly how to perform HPO on your
 # Exercise
 ---
 
-## Step (1): Ensure, on an interactive SLURM node, that CANDLE can run the model
+## Part 1: Ensure, on an interactive SLURM node, that CANDLE can run the model
 
 Create and enter a working directory on your data partition on Biowulf, e.g.,
 
@@ -181,8 +181,6 @@ Open up this input file ```vae_with_pytorch.in``` in a text editor and change th
 /
 ```
 
-Note that for the time being, we need to refrain from having spaces around the equals sign in the ```&control``` section of the input file, just as in a Bash script. We will remove this requirement in the near future.
-
 The other variables in the ```&control``` section, and the other two sections, don't really matter... again, we just want to make sure CANDLE can run the file once using the currently assigned K20x GPU. (Normally at this point the settings in the ```&default_model``` section of the input file *would* matter, but we didn't yet define these hyperparameters in the model script ```main.py```. We will do this soon!)
 
 Now "submit" the CANDLE input file. Note that by setting ```use_candle=0``` we're telling CANDLE to run the script interactively, as opposed to "submitting" the script to SLURM in batch mode.
@@ -293,14 +291,14 @@ Finished run of model_wrapper.sh from candle_compliant_wrapper.py
 done
 ```
 
-Finally, take a look in ```subprocess_out_and_err.txt``` to ensure that the default settings we specified in the ```&default_model``` section of the input file ```vae_with_pytorch.in``` had an effect when CANDLE ran the model script ```main.py```. You should see now that only two epochs total have been run!
+Finally, take a look in ```subprocess_out_and_err.txt``` to ensure that the default settings we specified in the ```&default_model``` section of the input file ```vae_with_pytorch.in``` had an effect when CANDLE ran the model script ```main.py```. You should see now that only two epochs have been run!
 
 Here is a "diff" summary of the CANDLE-related changes we made to the model script reinforcing that generally just two simple changes need to be made to your model script in order to make it CANDLE-compliant: (1) specifying the hyperparameters in the ```hyperparams``` dictionary and (2) returning a metric of the performance of a hyperparameter set such as the validation loss in the ```val_to_return``` variable:
 
 ```diff
 @@ -14,11 +14,14 @@ os.makedirs('results', exist_ok=True)
- 
- 
+
+
  parser = argparse.ArgumentParser(description='VAE MNIST Example')
 -parser.add_argument('--batch-size', type=int, default=128, metavar='N',
 +parser.add_argument('--batch-size', type=int, default=hyperparams['batch_size'], metavar='N',
@@ -313,25 +311,25 @@ Here is a "diff" summary of the CANDLE-related changes we made to the model scri
                      help='enables CUDA training')
  parser.add_argument('--seed', type=int, default=1, metavar='S',
                      help='random seed (default: 1)')
-@@ -127,6 +130,7 @@ def test(epoch):
+@@ -120,11 +130,13 @@ def test(epoch):
  
      test_loss /= len(test_loader.dataset)
      print('====> Test set loss: {:.4f}'.format(test_loss))
 +    return(test_loss)
  
-@@ -139,7 +143,8 @@ def test(epoch):
- for epoch in range(1, args.epochs + 1):
-     train(epoch)
--    test(epoch)
-+    val_to_return = test(epoch)
-     with torch.no_grad():
-         sample = torch.randn(64, 20).to(device)
-         sample = model.decode(sample).cpu()
+ if __name__ == "__main__":
+     for epoch in range(1, args.epochs + 1):
+         train(epoch)
+-        test(epoch)
++        val_to_return = test(epoch)
+         with torch.no_grad():
+             sample = torch.randn(64, 20).to(device)
+             sample = model.decode(sample).cpu()
 ```
 
 A complete, final version of ```main.py``` can be found [here](main.py).
 
-## (2) Run HPO on the model using SLURM's batch mode using CANDLE
+## Part 2: Run HPO on the model using SLURM's batch mode using CANDLE
 
 Now we want to run a full HPO on the VAE model script. We have already defined what the hyperparameters are in the script and what their default values should be; now we just need to define the space of hyperparameters we'd like the HPO to use.
 
