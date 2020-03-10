@@ -3,7 +3,7 @@ bigimg: "/img/Data+Center_DSC9777-5x3.jpg"
 title: Data Science Services
 ---
 
-Our mission is to leverage breakthrough advancements in scientific computing and data science to help National Cancer Institute scientific staff advance basic research, understanding, and treatments in cancer.
+Welcome to the Data Science Services team within SDSI. Our mission is to leverage breakthrough advancements in scientific computing and data science to help National Cancer Institute scientific staff advance basic research, understanding, and treatments in cancer.
 
 Our experience includes:
 
