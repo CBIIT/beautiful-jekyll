@@ -22,4 +22,4 @@ Ongoing activities include:
 * Custom code optimization
 * NCI-DOE machine learning capabilities transfer
 
-Let us help you move the field forward. Contact [George Zaki](mailto:george.zaki@nih.gov) to get started!
+Let us help you move the field forward! Contact [George Zaki](mailto:george.zaki@nih.gov) to get started.
