@@ -22,10 +22,11 @@ description: Homepage for the Strategic Data Science Initiatives (SDSI) team in 
 
 # List of links in the navigation bar
 navbar-links:
+  Data Science Services:
+    - Homepage: https://cbiit.github.com/sdsi/data_science_services
+    - CANDLE home: https://cbiit.github.com/sdsi/candle
+    - VAE using PyTorch with CANDLE: https://cbiit.github.com/sdsi/vae_with_pytorch
   Team: https://cbiit.github.com/sdsi/team
-  CANDLE:
-    - Homepage: https://cbiit.github.com/sdsi/candle
-    - VAE using PyTorch: https://cbiit.github.com/sdsi/vae_with_pytorch
   # About Me: "aboutme"
   # Resources:
   #   - Beautiful Jekyll: "http://deanattali.com/beautiful-jekyll/"
