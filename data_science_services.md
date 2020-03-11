@@ -3,7 +3,7 @@ bigimg: "/img/Data+Center_DSC9777-5x3.jpg"
 title: Data Science Services
 ---
 
-**<p align="center">Welcome to the Data Science Services team within SDSI!</p>**
+**<div align="center">Welcome to the Data Science Services team within SDSI!</div>**
 
 Our mission is to leverage breakthrough advancements in scientific computing and data science to help National Cancer Institute scientific staff advance basic research, understanding, and treatments in cancer. [Let us know](george.zaki@nih.gov) how we can help you!
 
