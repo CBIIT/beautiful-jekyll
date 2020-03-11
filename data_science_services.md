@@ -3,7 +3,9 @@ bigimg: "/img/Data+Center_DSC9777-5x3.jpg"
 title: Data Science Services
 ---
 
-Welcome to the Data Science Services team within SDSI. Our mission is to leverage breakthrough advancements in scientific computing and data science to help National Cancer Institute scientific staff advance basic research, understanding, and treatments in cancer.
+**<p align="center">Welcome to the Data Science Services team within SDSI!</p>**
+
+Our mission is to leverage breakthrough advancements in scientific computing and data science to help National Cancer Institute scientific staff advance basic research, understanding, and treatments in cancer. [Let us know](george.zaki@nih.gov) how we can help you!
 
 Our experience includes:
 
@@ -22,4 +24,4 @@ Ongoing activities include:
 * Custom code optimization
 * NCI-DOE machine learning capabilities transfer
 
-Let us help you move the field forward! Contact [George Zaki](mailto:george.zaki@nih.gov) to get started.
+Let us help you move the field forward! [Contact us](mailto:george.zaki@nih.gov) to get started.
