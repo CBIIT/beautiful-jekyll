@@ -35,6 +35,7 @@ navbar-links:
   Links:
 #    - CANDLE templates: "https://github.com/ECP-CANDLE/Supervisor/tree/fnlcr/templates"
     - NIH.AI: "https://nciphub.org/groups/nihai"
+    - ML for Drug Function Classification: "https://github.com/ravichas/ML-predict-drugclass"
 #    - Biowulf: "https://hpc.nih.gov"
 #    - CANDLE docs: "https://ecp-candle.github.io/Candle"
   #SDSI GitHub repo: "https://github.com/cbiit/sdsi"
