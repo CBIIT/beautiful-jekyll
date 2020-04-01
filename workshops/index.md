@@ -43,14 +43,10 @@ workshop website:  [https://github.com/ravichas/ML-predict-drugclass](https://gi
 Date: 		TBD
 Time:		10:00 am – 12:00 pm
 Location:	NCI Shady Grove, Room TBD
-Instructor:	Sarangan Ravichandran, PhD, PMP [C], Data Scientist,
-                             Frederick National Laboratory for Cancer Research and Adjunct Professor in
-                             Bioinformatics, Hood College
-
+Instructor:	Sarangan Ravichandran, PhD, PMP[C] 
+                Data Scientist
+                FNLCR, BIDS 
 ```
-To Register: 	TBD
-
-
 
 * [ML for Drug Function Classification](https://github.com/ravichas/ML-predict-drugclass)
 * [VAE using PyTorch with CANDLE](https://cbiit.github.com/sdsi/workshops/vae_with_pytorch)
