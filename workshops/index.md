@@ -3,9 +3,10 @@ bigimg: "/img/FNL_ATRF_Pano_4x10.jpg"
 title: Workshops
 ---
 
-# NCI CBIIT Hands-on Tutorial: 
+# NCI CBIIT Workshop: 
 
-## Using Machine Learning to Generate Molecular Descriptors for Drug Function Classification 
+## 1. Using Machine Learning to Generate Molecular Descriptors for Drug Function Classification 
+(Work-in progress, preliminary document)
 
 ![Drug Function Classification](Img/MLDrugData.jpg)
 
@@ -41,12 +42,16 @@ workshop website:  [https://github.com/ravichas/ML-predict-drugclass](https://gi
 
 ```
 Date: 		TBD
+Registration Link: In-progress
+
 Time:		10:00 am – 12:00 pm
 Location:	NCI Shady Grove, Room TBD
-Instructor:	Sarangan Ravichandran, PhD, PMP[C] 
+Instructor:	Sarangan Ravichandran, PhD, PMP
                 Data Scientist
                 FNLCR, BIDS 
 ```
+
+Click 
 
 * [ML for Drug Function Classification](https://github.com/ravichas/ML-predict-drugclass)
 * [VAE using PyTorch with CANDLE](https://cbiit.github.com/sdsi/workshops/vae_with_pytorch)
