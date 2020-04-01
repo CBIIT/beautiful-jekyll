@@ -33,7 +33,7 @@ Tools include:
 
 <ul>
 <li> Scikit-learn for creating Random Forest classification models </li>
-<li> A modeling workflow that include data collection/curation, featurization  </li>
+<li> A modeling workflow that include data collection/curation, featurization  
 (fingerprints), classification modeling using ensemble-based methods and analysis and based 
 on the lessons-learned from AMPL publication </li>
 </ul>
