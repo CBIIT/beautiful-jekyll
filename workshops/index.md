@@ -14,7 +14,7 @@ chemical structures, compute chemical descriptors, create and analyze Machine Le
 Open source chemoinformatics software and predictive data analysis scikit-learn library will be used to 
 compute key pharma-relevant descriptors and generate/analyze drug classification models.
 
-
+<p>
 Part 1 will be a 30-minute presentation followed by a 20-minute tools review. We will introduce ML concepts 
 focused on creating molecular structures and extracting features or chemical descriptors. For molecular features, 
 we will focus on molecular fingerprint descriptors and we will show how one can generate the traditional 
@@ -26,7 +26,7 @@ molecular properties. We will demonstrate the use of the following two tools for
 <li> Mordred and other open source software to generate molecular features </li>
 </ul>
 
-Part 2 will include a 30-minute presentation followed by a 20-minute tools review. 
+<p> Part 2 will include a 30-minute presentation followed by a 20-minute tools review. 
 in Part 2, we will extend the concepts demonstrated in Part 1 to build machine learning 
 classification models for predicting small-molecule (drug-like) function (ex., CNS, GI Agent, etc.). 
 Tools include:
@@ -36,6 +36,7 @@ Tools include:
 <li> A modeling workflow that include data collection/curation, featurization  </li>
 (fingerprints), classification modeling using ensemble-based methods and analysis and based 
 on the lessons-learned from AMPL publication </li>
+</ul>
 
 workshop website:  [https://github.com/ravichas/ML-predict-drugclass](https://github.com/ravichas/ML-predict-drugclass)
 
