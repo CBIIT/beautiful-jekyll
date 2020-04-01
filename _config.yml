@@ -25,7 +25,10 @@ navbar-links:
   Data Science Services:
     - Homepage: https://cbiit.github.com/sdsi/data_science_services
     - CANDLE home: https://cbiit.github.com/sdsi/candle
-    - VAE using PyTorch with CANDLE: https://cbiit.github.com/sdsi/vae_with_pytorch
+  Workshops:
+    - Workshops Home: https://cbiit.github.com/sdsi/workshops
+    - ML for Drug Function Classification: https://github.com/ravichas/ML-predict-drugclass
+    - VAE using PyTorch with CANDLE: https://cbiit.github.com/sdsi/workshops/vae_with_pytorch
   Team: https://cbiit.github.com/sdsi/team
   # About Me: "aboutme"
   # Resources:
@@ -35,7 +38,6 @@ navbar-links:
   Links:
 #    - CANDLE templates: "https://github.com/ECP-CANDLE/Supervisor/tree/fnlcr/templates"
     - NIH.AI: "https://nciphub.org/groups/nihai"
-    - ML for Drug Function Classification: "https://github.com/ravichas/ML-predict-drugclass"
 #    - Biowulf: "https://hpc.nih.gov"
 #    - CANDLE docs: "https://ecp-candle.github.io/Candle"
   #SDSI GitHub repo: "https://github.com/cbiit/sdsi"
