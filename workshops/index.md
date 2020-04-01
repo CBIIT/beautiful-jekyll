@@ -24,7 +24,7 @@ molecular properties. We will demonstrate the use of the following two tools for
 <ul>
 <li> Rdkit libraries, Python’s open source cheminformatics software toolkit </li>
 <li> Mordred and other open source software to generate molecular features </li>
-</ul
+</ul>
 
 <p> Part 2 will include a 30-minute presentation followed by a 20-minute tools review. 
 In Part 2, we will extend the concepts demonstrated in Part 1 to build machine learning 
@@ -37,7 +37,7 @@ Tools include:
 (fingerprints), classification modeling using ensemble-based methods and analysis and based 
 on the lessons-learned from AMPL publication </li>
 
-workshop website:  https://github.com/ravichas/ML-predict-drugclass
+workshop website:  [https://github.com/ravichas/ML-predict-drugclass](https://github.com/ravichas/ML-predict-drugclass)
 
 <ul>
 <li> Date: 		TBD
@@ -51,9 +51,6 @@ workshop website:  https://github.com/ravichas/ML-predict-drugclass
 To Register: 	TBD
 
 
-intro blah blah blah blah
-
-Ravi feel free to use a different header image!
 
 * [ML for Drug Function Classification](https://github.com/ravichas/ML-predict-drugclass)
 * [VAE using PyTorch with CANDLE](https://cbiit.github.com/sdsi/workshops/vae_with_pytorch)
