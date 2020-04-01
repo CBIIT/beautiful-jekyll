@@ -15,7 +15,7 @@ Open source chemoinformatics software and predictive data analysis scikit-learn 
 compute key pharma-relevant descriptors and generate/analyze drug classification models.
 
 
-<p> Part 1 will be a 30-minute presentation followed by a 20-minute tools review. We will introduce ML concepts 
+Part 1 will be a 30-minute presentation followed by a 20-minute tools review. We will introduce ML concepts 
 focused on creating molecular structures and extracting features or chemical descriptors. For molecular features, 
 we will focus on molecular fingerprint descriptors and we will show how one can generate the traditional 
 molecular properties. We will demonstrate the use of the following two tools for the exploratory data 
@@ -26,28 +26,28 @@ molecular properties. We will demonstrate the use of the following two tools for
 <li> Mordred and other open source software to generate molecular features </li>
 </ul>
 
-<p> Part 2 will include a 30-minute presentation followed by a 20-minute tools review. 
-In Part 2, we will extend the concepts demonstrated in Part 1 to build machine learning 
+Part 2 will include a 30-minute presentation followed by a 20-minute tools review. 
+in Part 2, we will extend the concepts demonstrated in Part 1 to build machine learning 
 classification models for predicting small-molecule (drug-like) function (ex., CNS, GI Agent, etc.). 
 Tools include:
 
 <ul>
 <li> Scikit-learn for creating Random Forest classification models </li>
-<li> A modeling workflow that include data collection/curation, featurization 
+<li> A modeling workflow that include data collection/curation, featurization  </li>
 (fingerprints), classification modeling using ensemble-based methods and analysis and based 
 on the lessons-learned from AMPL publication </li>
 
-<p> workshop website:  [https://github.com/ravichas/ML-predict-drugclass](https://github.com/ravichas/ML-predict-drugclass)
+workshop website:  [https://github.com/ravichas/ML-predict-drugclass](https://github.com/ravichas/ML-predict-drugclass)
 
-<ul>
-<li> Date: 		TBD
-</li>Time:		10:00 am – 12:00 pm
-<li> Location:	NCI Shady Grove, Room TBD
-<li> Instructor:	Sarangan Ravichandran, PhD, PMP [C], Data Scientist,
+```
+Date: 		TBD
+Time:		10:00 am – 12:00 pm
+Location:	NCI Shady Grove, Room TBD
+Instructor:	Sarangan Ravichandran, PhD, PMP [C], Data Scientist,
                              Frederick National Laboratory for Cancer Research and Adjunct Professor in
                              Bioinformatics, Hood College
-</ul>
 
+```
 To Register: 	TBD
 
 
