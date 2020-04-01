@@ -9,7 +9,7 @@ title: Workshops
 
 ### Overview 
 
-This workshop will introduce you to the concepts and tools to generate, explore small molecule (drug-like) 
+This workshop will introduce the concepts and tools to generate, explore small molecule (drug-like) 
 chemical structures, compute chemical descriptors, create and analyze Machine Learning classification models. 
 Open source chemoinformatics software and predictive data analysis scikit-learn library will be used to 
 compute key pharma-relevant descriptors and generate/analyze drug classification models.
@@ -22,10 +22,8 @@ molecular properties. We will demonstrate the use of the following two tools for
 (chemical) analysis and feature generation:
 
 
-<ul>
-<li> Rdkit libraries, Python’s open source cheminformatics software toolkit </li>
-<li> Mordred and other open source software to generate molecular features </li>
-</ul>
+* Rdkit libraries, Python’s open source cheminformatics software toolkit 
+* Mordred and other open source software to generate molecular features 
 
 Part 2 will include a 30-minute presentation followed by a 20-minute tools review. 
 in Part 2, we will extend the concepts demonstrated in Part 1 to build machine learning 
