@@ -42,7 +42,7 @@ workshop website:  [https://github.com/ravichas/ML-predict-drugclass](https://gi
 
 ```
 Date: 		TBD
-Registration Link: In-progress
+Registration Link: Coming-soon
 
 Time:		10:00 am – 12:00 pm
 Location:	NCI Shady Grove, Room TBD
@@ -51,7 +51,6 @@ Instructor:	Sarangan Ravichandran, PhD, PMP
                 FNLCR, BIDS 
 ```
 
-Click [here](Docs/DrugTypeClassModeling-slides.pdf) to view the workshop slides. 
+## Click [here](Docs/DrugTypeClassModeling-slides.pdf) to view the workshop slides. 
+## Click [here](Docs/predict-drugclass-toolsreview.pdf) to view the workshop hands-on exercise Notebook (Jupyter)
 
-* [ML for Drug Function Classification](https://github.com/ravichas/ML-predict-drugclass)
-* [VAE using PyTorch with CANDLE](https://cbiit.github.com/sdsi/workshops/vae_with_pytorch)
