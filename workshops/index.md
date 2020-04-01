@@ -7,13 +7,14 @@ title: Workshops
 
 ## Using Machine Learning to Generate Molecular Descriptors for Drug Function Classification 
 
+![Drug Function Classification](Img/MLDrugData.png)
+
 ### Overview 
 
 This workshop will introduce the concepts and tools to generate, explore small molecule (drug-like) 
 chemical structures, compute chemical descriptors, create and analyze Machine Learning classification models. 
-Open source chemoinformatics software and predictive data analysis scikit-learn library will be used to 
-compute key pharma-relevant descriptors and generate/analyze drug classification models.
-
+Open source chemoinformatics and predictive data analysis scikit-learn libraries will be used to 
+compute key pharma-relevant descriptors and generate/analyze drug classification models respectively.
 
 Part 1 will be a 30-minute presentation followed by a 20-minute tools review. We will introduce ML concepts 
 focused on creating molecular structures and extracting features or chemical descriptors. For molecular features, 
