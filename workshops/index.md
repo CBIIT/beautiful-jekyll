@@ -37,7 +37,7 @@ Tools include:
 (fingerprints), classification modeling using ensemble-based methods and analysis and based 
 on the lessons-learned from AMPL publication </li>
 
-workshop website:  [https://github.com/ravichas/ML-predict-drugclass](https://github.com/ravichas/ML-predict-drugclass)
+<p> workshop website:  [https://github.com/ravichas/ML-predict-drugclass](https://github.com/ravichas/ML-predict-drugclass)
 
 <ul>
 <li> Date: 		TBD
