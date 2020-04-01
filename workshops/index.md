@@ -51,6 +51,6 @@ Instructor:	Sarangan Ravichandran, PhD, PMP
                 FNLCR, BIDS 
 ```
 
-## Click [here](Docs/DrugTypeClassModeling-slides.pdf) to view the workshop slides. 
-## Click [here](Docs/predict-drugclass-toolsreview.pdf) to view the workshop hands-on exercise Notebook (Jupyter)
+#### Click [here](Docs/DrugTypeClassModeling-slides.pdf) to view the workshop slides. 
+#### Click [here](Docs/predict-drugclass-toolsreview.pdf) to view the workshop hands-on exercise Notebook (Jupyter)
 
