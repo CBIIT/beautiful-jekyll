@@ -7,7 +7,7 @@ title: Workshops
 
 ## Using Machine Learning to Generate Molecular Descriptors for Drug Function Classification 
 
-[Drug Function Classification](Workshops/Img/MLDrugData.jpg)
+[Drug Function Classification](Img/MLDrugData.jpg)
 
 ### Overview 
 
