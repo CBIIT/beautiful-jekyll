@@ -17,6 +17,8 @@ chemical structures, compute chemical descriptors, create and analyze Machine Le
 Open source chemoinformatics and predictive data analysis scikit-learn libraries will be used to 
 compute key pharma-relevant descriptors and generate/analyze drug classification models respectively.
 
+![MoltoFP](Img/Mol-FP.jpg)
+
 Part 1 will be a 30-minute presentation followed by a 20-minute tools review. We will introduce ML concepts 
 focused on creating molecular structures and extracting features or chemical descriptors. For molecular features, 
 we will focus on molecular fingerprint descriptors and we will show how one can generate the traditional 
