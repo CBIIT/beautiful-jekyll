@@ -35,13 +35,16 @@ Tools include:
 * Scikit-learn for creating Random Forest classification models 
 * A modeling workflow that include data collection/curation, featurization  
 (fingerprints), classification modeling using ensemble-based methods and analysis and based 
-on the lessons-learned from [AMPL publication](https://arxiv.org/abs/1911.05211).
+on the lessons-learned from [AMPL publication](https://arxiv.org/abs/1911.05211).\
 
 
 
-#### Workshop website: [https://github.com/ravichas/ML-predict-drugclass](https://github.com/ravichas/ML-predict-drugclass)
+#### Workshop website:\
+[https://github.com/ravichas/ML-predict-drugclass](https://github.com/ravichas/ML-predict-drugclass)
+
 
 ```
+
 Date: 		TBD
 Registration Link: Coming-soon
 
