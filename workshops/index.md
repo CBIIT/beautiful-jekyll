@@ -11,14 +11,14 @@ Click [here](ML2020-1) to view the details of the **Learning Drug Function from 
 
 #### Miscellaneous courses/workshops 
 
-**How to generate molecular features for drug function classification?**
+**How to generate molecular features for drug function classification?** <br>
 This includes many take-home exercises and solutions. 
 To get the maximum benefit out of this workshop, please clone/run the Jupyter notebook. 
 If you dont have time, you can also try the repository Jupyter notebook BINDER cloud instance 
 accessible from the repository link, 
 [https://github.com/ravichas/SRWkshp1](https://github.com/ravichas/SRWkshp1) 
 
-**How to create classification models for predicting drug function?**
+**How to create classification models for predicting drug function?** <br>
 This is a continuation of the previous workshop and includes many take-home exercises and solutions. 
 To get the maximum benefit out of this workshop, please clone/run the Jupyter notebook. 
 If you dont have time, you can also try the repository Jupyter notebook BINDER cloud instance 
