@@ -6,12 +6,9 @@ title: Workshops
 ## NCI CBIIT Workshop: 
 
 ### Using Machine Learning to Generate Molecular Descriptors for Drug Function Classification 
-(Work-in progress, preliminary document)
-
 ![Drug Function Classification](./../Img/MLDrugData.jpg)
 
 #### Overview 
-
 This workshop will introduce the concepts and tools to generate, explore small molecule (drug-like) 
 chemical structures, compute chemical descriptors, create and analyze Machine Learning classification models. 
 Open source chemoinformatics and predictive data analysis scikit-learn libraries will be used to 
