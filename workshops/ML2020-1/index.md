@@ -3,9 +3,9 @@ bigimg: "/img/FNL_ATRF_Pano_4x10.jpg"
 title: Workshops
 ---
 
-## NCI CBIIT Workshop: 
+### NCI CBIIT Workshop-1: 
 
-### Using Machine Learning to Generate Molecular Descriptors for Drug Function Classification 
+**Using Machine Learning to Generate Molecular Descriptors for Drug Function Classification**
 ![Drug Function Classification](./../Img/MLDrugData.jpg)
 
 #### Overview 
@@ -16,6 +16,7 @@ compute key pharma-relevant descriptors and generate/analyze drug classification
 
 ![MoltoFP](./../Img/Mol-FP.png)
 
+#### Agenda
 Part 1 will be a 30-minute presentation followed by a 20-minute tools review. We will introduce ML concepts 
 focused on creating molecular structures and extracting features or chemical descriptors. For molecular features, 
 we will focus on molecular fingerprint descriptors and we will show how one can generate the traditional 
@@ -30,7 +31,6 @@ Part 2 will include a 30-minute presentation followed by a 20-minute tools revie
 in Part 2, we will extend the concepts demonstrated in Part 1 to build machine learning 
 classification models for predicting small-molecule (drug-like) function (ex., CNS, GI Agent, etc.). 
 Tools include:
-
 
 * Scikit-learn for creating Random Forest classification models 
 * A modeling workflow that include data collection/curation, featurization  
