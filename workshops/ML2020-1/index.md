@@ -43,7 +43,6 @@ on the lessons-learned from [AMPL publication](https://arxiv.org/abs/1911.05211)
 
 
 ```
-
 Date: 		TBD
 Registration Link: Coming-soon
 
