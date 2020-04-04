@@ -8,7 +8,7 @@ title: Courses & Workshops
 
 #### NCI CBIIT Workshop-1
 
-Click [here](ML-2020-1/index.md) to view the details of the **Learning Drug Function from Molecular structures using Random Forest** workshop
+Click [here](ML2020-1) to view the details of the **Learning Drug Function from Molecular structures using Random Forest** workshop
 
 #### Miscellaneous courses/workshops 
 
