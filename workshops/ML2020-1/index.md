@@ -38,8 +38,7 @@ Tools include:
 on the lessons-learned from [AMPL publication](https://arxiv.org/abs/1911.05211).  
 
 
-
-#### Workshop website: 
+**Workshop website:**
 [https://github.com/ravichas/ML-predict-drugclass](https://github.com/ravichas/ML-predict-drugclass)
 
 
