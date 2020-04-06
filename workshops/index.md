@@ -4,7 +4,7 @@ title: Courses & Workshops
 ---
 
 
-### :-: Events planned for 2020 
+### <center> Events planned for 2020  </center>
 ---
 
 1. **NCI CBIIT Workshop-1 (Preliminary document; Date/Venue: TBD)** 
