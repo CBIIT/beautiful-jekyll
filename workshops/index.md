@@ -4,12 +4,14 @@ title: Courses & Workshops
 ---
 
 
-#### Events planned for 2020 <br />
+#### Events planned for 2020 
+---
 
 1. **NCI CBIIT Workshop-1 (Preliminary document; Date/Venue: TBD)** <br />
    Click [here](ML2020-1) to view the details of the **Learning Drug Function from Molecular structures using Random Forest** workshop.   
 
-#### Miscellaneous courses/workshops <br />
+#### Miscellaneous courses/workshops 
+---
 
 1. **How to generate molecular features for drug function classification?** <br />
 This includes many take-home exercises and solutions. 
