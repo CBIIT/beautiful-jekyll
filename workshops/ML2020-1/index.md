@@ -43,11 +43,11 @@ on the lessons-learned from [AMPL publication](https://arxiv.org/abs/1911.05211)
 
 
 ```
-Date: 		TBD
+Date: 		July 16, 2020
 Registration Link: Coming-soon
 
-Time:		10:00 am – 12:00 pm
-Location:	NCI Shady Grove, Room TBD
+Time:		1:00 PM – 3:00 PM
+Location:	Webex
 Instructor:	Sarangan Ravichandran, PhD, PMP
                 Data Scientist
                 FNLCR, BIDS 
